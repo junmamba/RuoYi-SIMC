@@ -1,5 +1,6 @@
 package com.ruoyi.simc.service.impl;
 
+import com.ruoyi.common.core.domain.TreeSelect;
 import com.ruoyi.simc.domain.SimcDistrict;
 import com.ruoyi.simc.mapper.SimcDistrictMapper;
 import com.ruoyi.simc.service.ISimcDistrictService;
@@ -138,5 +139,106 @@ public class SimcDistrictServiceImpl implements ISimcDistrictService {
     @Override
     public List<SimcDistrict> queryByParentDistrictIdAndDistrictNames(long parentDistrictId, List<String> townshipDistrictNameList) throws Exception {
         return this.simcDistrictMapper.selectByParentDistrictIdAndDistrictNames(parentDistrictId, townshipDistrictNameList);
+    }
+
+    /**
+     * 查询行政区域
+     *
+     * @param districtIdList
+     * @return
+     * @throws Exception
+     */
+    public List<SimcDistrict> queryByDistrictIdList(List<Long> districtIdList) throws Exception {
+        if (CollectionUtils.isEmpty(districtIdList)) {
+            return null;
+        }
+        return this.simcDistrictMapper.selectByDistrictIdList(districtIdList);
+    }
+
+    /**
+     * 查询柴桑区下级行政区域
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<TreeSelect> queryChaiSangSubordinateDistrict() throws Exception {
+        // @part 1: 所有乡镇
+        List<SimcDistrict> townshipDistrictList = this.simcDistrictMapper.selectByParentDistrictIdAndDistrictNames(CHAI_SANG_TOWNSHIP_DISTRICT_ID, null);
+        if (CollectionUtils.isEmpty(townshipDistrictList)) {
+            return new ArrayList<>();
+        }
+        List<Long> townshipDistrictIdList = new ArrayList<>();
+        for (SimcDistrict townshipDistrict : townshipDistrictList) {
+            townshipDistrictIdList.add(townshipDistrict.getDistrictId());
+        }
+
+        // @part 2: 所有村（社区）
+        List<SimcDistrict> villageDistrictList = this.simcDistrictMapper.selectByParentDistrictIdList(townshipDistrictIdList);
+        List<Long> villageDistrictIdList = new ArrayList<>();
+        for (SimcDistrict villageDistrict : villageDistrictList) {
+            villageDistrictIdList.add(villageDistrict.getDistrictId());
+        }
+
+        // @part 3: 所有组
+        List<SimcDistrict> groupDistrictList = this.simcDistrictMapper.selectByParentDistrictIdList(villageDistrictIdList);
+
+        List<TreeSelect> treeList = new ArrayList<>();
+        for (SimcDistrict townshipDistrict : townshipDistrictList) {
+            TreeSelect tree = new TreeSelect();
+            treeList.add(tree);
+            tree.setId(townshipDistrict.getDistrictId());
+            tree.setLabel(townshipDistrict.getDistrictName());
+
+            List<TreeSelect> villageTreeList = new ArrayList<>();
+            tree.setChildren(villageTreeList);
+            for (SimcDistrict villageDistrict : villageDistrictList) {
+                if (villageDistrict.getParentDistrictId().longValue() != townshipDistrict.getDistrictId()) {
+                    continue;
+                }
+                TreeSelect villageTree = new TreeSelect();
+                villageTree.setId(villageDistrict.getDistrictId());
+                villageTree.setLabel(villageDistrict.getDistrictName());
+                villageTreeList.add(villageTree);
+                List<TreeSelect> groupTreeList = new ArrayList<>();
+                villageTree.setChildren(groupTreeList);
+                for (SimcDistrict groupDistrict : groupDistrictList) {
+                    if (groupDistrict.getParentDistrictId().longValue() != villageDistrict.getDistrictId()) {
+                        continue;
+                    }
+                    TreeSelect groupTree = new TreeSelect();
+                    groupTree.setId(groupDistrict.getDistrictId());
+                    groupTree.setLabel(groupDistrict.getDistrictName());
+                    groupTreeList.add(groupTree);
+                }
+            }
+        }
+        return treeList;
+    }
+
+    public Map<String, Long> buildQueryDistrictParam(Long districtId) throws Exception {
+        Map<String, Long> param = new HashMap();
+        if (null == districtId) {
+            return param;
+        }
+
+        SimcDistrict simcDistrict = this.simcDistrictMapper.selectByPrimaryKey(districtId);
+        if (null == simcDistrict
+                || !(simcDistrict.getDistrictType() == 4 || simcDistrict.getDistrictType() == 5 || simcDistrict.getDistrictType() == 6)) {
+            param.put("townshipDistrictId", -1L);
+            param.put("villageDistrictId", -1L);
+            param.put("groupDistrictId", -1L);
+        }
+        if (simcDistrict.getDistrictType() == 4) {
+            param.put("townshipDistrictId", districtId);
+        } else if (simcDistrict.getDistrictType() == 5) {
+            param.put("townshipDistrictId", simcDistrict.getParentDistrictId());
+            param.put("villageDistrictId", simcDistrict.getDistrictId());
+        } else if (simcDistrict.getDistrictType() == 6) {
+            SimcDistrict villageSimcDistrict = this.simcDistrictMapper.selectByPrimaryKey(simcDistrict.getParentDistrictId());
+            param.put("townshipDistrictId", null == villageSimcDistrict ? -1L : villageSimcDistrict.getParentDistrictId());
+            param.put("villageDistrictId", simcDistrict.getParentDistrictId());
+            param.put("groupDistrictId", districtId);
+        }
+        return param;
     }
 }

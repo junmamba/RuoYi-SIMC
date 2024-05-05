@@ -1,6 +1,17 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
+      <el-form-item label="行政区域" prop="districtName">
+        <el-cascader
+          v-model="queryParams.districtId"
+          :options="districtIdOptions"
+          :props="districtProps"
+          style="width: 220px"
+          size="small"
+          clearable
+        >
+        </el-cascader>
+      </el-form-item>
       <el-form-item label="姓名" prop="residentName">
         <el-input
           v-model="queryParams.residentName"
@@ -84,23 +95,40 @@
           size="mini"
           @click="handleFileImport"
           v-hasPermi="['system:user:import']"
-        >导入</el-button>
+        >导入
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="tableList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="rsiList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="50" align="center"/>
+      <el-table-column type="selection" width="30" align="center"/>
       <el-table-column label="姓名" align="center" prop="residentName"/>
-      <el-table-column label="性别" align="center" prop="residentSex"/>
+      <el-table-column label="性别" align="center" prop="residentSex">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.simc_sex" :value="scope.row.residentSex"/>
+        </template>
+      </el-table-column>
       <el-table-column label="联系电话" align="center" prop="residentPhone"/>
-      <el-table-column label="行政区域" align="center" prop="residentDistrictId"/>
-      <el-table-column label="参保类型" align="center" prop="socialInsuranceType"/>
-      <el-table-column label="参保状态" align="center" prop="socialInsuranceState"/>
-      <el-table-column label="审批通过时间" align="center" prop=""/>
-      <el-table-column label="征地项目" align="center" prop="status"/>
-      <el-table-column label="征地时间" align="center" prop="status"/>
-      <el-table-column label="是否市级征地项目" align="center" prop="status"/>
+      <el-table-column label="行政区域" align="center" prop="districtName"/>
+      <el-table-column label="参保类型" align="center" prop="socialInsuranceType">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.simc_insurance_type" :value="scope.row.socialInsuranceType"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="参保状态" align="center" prop="socialInsuranceState">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.simc_insurance_state" :value="scope.row.socialInsuranceState"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="审批通过时间" align="center" prop="strSocialInsuranceJointApprovalTime"/>
+      <el-table-column label="征地项目" align="center" prop="fllProjectName"/>
+      <el-table-column label="征地时间" align="center" prop="fllTime"/>
+      <el-table-column label="市级征地项目" align="center" prop="fllProjectIsCityLevel">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.simc_is_city_level" :value="scope.row.fllProjectIsCityLevel"/>
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center" prop="status"/>
     </el-table>
 
@@ -142,17 +170,19 @@
 
 <script>
 import {tableList} from "@/api/simc/rsi";
-import { getToken } from "@/utils/auth";
+import {listChaiSangDistrict} from "@/api/simc/district";
+import {getToken} from "@/utils/auth";
 
 export default {
   name: "ResidentSocialInsurance",
-  dicts: ['simc_sex', 'simc_insurance_type', 'simc_insurance_state'],
+  dicts: ['simc_sex', 'simc_insurance_type', 'simc_insurance_state', 'simc_is_city_level'],
   data() {
     return {
       // 遮罩层
       loading: true,
       // 选中数组
       ids: [],
+      districtIdOptions: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -179,19 +209,26 @@ export default {
         // 是否禁用上传
         isUploading: false,
         // 设置上传的请求头部
-        headers: { Authorization: "Bearer " + getToken() },
+        headers: {Authorization: "Bearer " + getToken()},
         // 上传的地址
         url: process.env.VUE_APP_BASE_API + "/simc/rsi/importData"
       },
       queryParams: {
         pageNum: 1,
         pageSize: 20,
+        districtId: undefined,
         residentName: undefined,
         residentSex: undefined,
         residentPhone: undefined,
         socialInsuranceType: undefined,
         socialInsuranceState: undefined,
         fllProjectName: undefined
+      },
+      districtProps: {
+        value: 'id',
+        expandTrigger: 'hover',
+        checkStrictly: true,
+        emitPath: false
       },
       // 表单参数
       form: {},
@@ -200,6 +237,9 @@ export default {
     };
   },
   created() {
+    listChaiSangDistrict().then(response => {
+      this.districtIdOptions = response.subordinateDistricts;
+    });;
     this.tableList();
   },
   methods: {
@@ -219,8 +259,10 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.queryParams.districtId = [];
       this.resetForm("queryForm");
       this.socialInsuranceJointApprovalTimeRange = [];
+
       this.handleQuery();
     },
     /** 导入按钮操作 */
@@ -237,8 +279,8 @@ export default {
       this.upload.open = false;
       this.upload.isUploading = false;
       this.$refs.upload.clearFiles();
-      this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true });
-      this.getList();
+      this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", {dangerouslyUseHTMLString: true});
+      this.tableList();
     },
     // 提交上传文件
     submitFileForm() {

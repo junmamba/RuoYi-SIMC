@@ -1,15 +1,14 @@
 package com.ruoyi.simc.service.impl;
 
-import com.ruoyi.simc.domain.SimcDistrict;
 import com.ruoyi.simc.domain.SimcResidentSocialInsurance;
-import com.ruoyi.simc.mapper.SimcDistrictMapper;
 import com.ruoyi.simc.mapper.SimcResidentSocialInsuranceMapper;
+import com.ruoyi.simc.service.ISimcDistrictService;
 import com.ruoyi.simc.service.ISimcResidentSocialInsuranceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @description:
@@ -21,8 +20,21 @@ public class SimcResidentSocialInsuranceServiceImpl implements ISimcResidentSoci
     @Autowired
     private SimcResidentSocialInsuranceMapper simcResidentSocialInsuranceMapper;
 
+    @Autowired
+    private ISimcDistrictService simcDistrictService;
+
     @Override
-    public List<SimcResidentSocialInsurance> selectList(SimcResidentSocialInsurance rsi) {
+    public List<SimcResidentSocialInsurance> selectList(SimcResidentSocialInsurance rsi) throws Exception {
+        Map<String, Long> districtParam = this.simcDistrictService.buildQueryDistrictParam(rsi.getDistrictId());
+        if (districtParam.containsKey("townshipDistrictId")){
+            rsi.setResidentTownshipDistrictId(districtParam.get("townshipDistrictId"));
+        }
+        if (districtParam.containsKey("villageDistrictId")){
+            rsi.setResidentVillageDistrictId(districtParam.get("villageDistrictId"));
+        }
+        if (districtParam.containsKey("groupDistrictId")){
+            rsi.setResidentGroupDistrictId(districtParam.get("groupDistrictId"));
+        }
         return this.simcResidentSocialInsuranceMapper.selectList(rsi);
     }
 }

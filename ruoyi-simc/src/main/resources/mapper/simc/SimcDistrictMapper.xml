@@ -116,4 +116,24 @@
       </foreach>
     </if>
   </select>
+
+  <select id="selectByDistrictIdList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from simc_district
+    where district_id in
+      <foreach collection="districtIdList" item="districtId" open="(" separator="," close=")">
+        #{districtId}
+      </foreach>
+  </select>
+
+  <select id="selectByParentDistrictIdList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from simc_district
+    where parent_district_id in
+    <foreach collection="parentDistrictIdList" item="parentDistrictId" open="(" separator="," close=")">
+      #{parentDistrictId}
+    </foreach>
+  </select>
 </mapper>

@@ -19,4 +19,8 @@ public interface SimcDistrictMapper {
     int updateByPrimaryKey(SimcDistrict record);
 
     List<SimcDistrict> selectByParentDistrictIdAndDistrictNames(@Param("parentDistrictId") Long parentDistrictId, @Param("districtNames") List<String> districtNames);
+
+    List<SimcDistrict> selectByDistrictIdList(@Param("districtIdList") List<Long> districtIdList);
+
+    List<SimcDistrict> selectByParentDistrictIdList(@Param("parentDistrictIdList") List<Long> parentDistrictIdList);
 }

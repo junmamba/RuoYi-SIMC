@@ -21,6 +21,10 @@ public class SimcResidentSocialInsurance extends BaseEntity {
 
     private Long residentGroupDistrictId;
 
+    private Long districtId;
+
+    private String districtName;
+
     private Integer fllId;
 
     private String fllProjectName;
@@ -34,6 +38,8 @@ public class SimcResidentSocialInsurance extends BaseEntity {
     private String socialInsuranceState;
 
     private Date socialInsuranceJointApprovalTime;
+
+    private String strSocialInsuranceJointApprovalTime;
 
     private String remark;
 
@@ -203,5 +209,29 @@ public class SimcResidentSocialInsurance extends BaseEntity {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public Long getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(Long districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public String getStrSocialInsuranceJointApprovalTime() {
+        return strSocialInsuranceJointApprovalTime;
+    }
+
+    public void setStrSocialInsuranceJointApprovalTime(String strSocialInsuranceJointApprovalTime) {
+        this.strSocialInsuranceJointApprovalTime = strSocialInsuranceJointApprovalTime;
     }
 }

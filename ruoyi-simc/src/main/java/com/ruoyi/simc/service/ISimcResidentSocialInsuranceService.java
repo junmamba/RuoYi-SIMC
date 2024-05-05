@@ -16,5 +16,5 @@ public interface ISimcResidentSocialInsuranceService {
      * @param rsi 岗位信息
      * @return 居民社会保险列表
      */
-    public List<SimcResidentSocialInsurance> selectList(SimcResidentSocialInsurance rsi);
+    public List<SimcResidentSocialInsurance> selectList(SimcResidentSocialInsurance rsi) throws Exception;
 }

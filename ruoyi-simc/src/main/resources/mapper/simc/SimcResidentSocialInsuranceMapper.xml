@@ -282,17 +282,27 @@
         AND resident_name like concat('%', #{residentName}, '%')
       </if>
       <if test="residentPhone != null">
-        AND resident_phone = #{residentPhone}
+        AND resident_phone like concat('%', #{residentPhone}, '%')
       </if>
       <if test="residentSex != null">
         AND resident_sex = #{residentSex}
       </if>
       <if test="socialInsuranceType != null">
-        AND socialInsurance_type = #{socialInsuranceType}
+        AND social_insurance_type = #{socialInsuranceType}
       </if>
       <if test="socialInsuranceState != null">
-        AND socialInsurance_state = #{socialInsuranceState}
+        AND social_insurance_state = #{socialInsuranceState}
       </if>
+      <if test="residentTownshipDistrictId != null">
+        AND resident_township_district_id = #{residentTownshipDistrictId}
+      </if>
+      <if test="residentVillageDistrictId != null">
+        AND resident_village_district_id = #{residentVillageDistrictId}
+      </if>
+      <if test="residentGroupDistrictId != null">
+        AND resident_group_district_id = #{residentGroupDistrictId}
+      </if>
+
       <if test="params.beginSocialInsuranceJointApprovalTime != null and params.beginSocialInsuranceJointApprovalTime != ''"><!-- 开始时间检索 -->
         AND social_insurance_joint_approval_time &gt;= #{params.beginSocialInsuranceJointApprovalTime}
       </if>

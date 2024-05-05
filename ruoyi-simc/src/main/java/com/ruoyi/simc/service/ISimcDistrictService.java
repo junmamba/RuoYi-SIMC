@@ -1,8 +1,10 @@
 package com.ruoyi.simc.service;
 
+import com.ruoyi.common.core.domain.TreeSelect;
 import com.ruoyi.simc.domain.SimcDistrict;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,4 +31,23 @@ public interface ISimcDistrictService {
      * @throws Exception
      */
     public List<SimcDistrict> queryByParentDistrictIdAndDistrictNames(long parentDistrictId, List<String> townshipDistrictNameList) throws Exception;
+
+    /**
+     * 查询行政区域
+     *
+     * @param districtIdList
+     * @return
+     * @throws Exception
+     */
+    public List<SimcDistrict> queryByDistrictIdList(List<Long> districtIdList) throws Exception;
+
+    /**
+     * 查询柴桑区
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<TreeSelect> queryChaiSangSubordinateDistrict() throws Exception;
+
+    public Map<String, Long> buildQueryDistrictParam(Long districtId) throws Exception;
 }
