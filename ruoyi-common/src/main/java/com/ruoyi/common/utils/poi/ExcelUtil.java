@@ -24,6 +24,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.core.domain.ExcelRowData;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -390,13 +392,14 @@ public class ExcelUtil<T>
                 {
                     continue;
                 }
-                T entity = null;
+                T entity = clazz.newInstance();
+                if (entity instanceof ExcelRowData) {
+                    ((ExcelRowData) entity).setRowIndex(i);
+                }
                 for (Map.Entry<Integer, Object[]> entry : fieldsMap.entrySet())
                 {
                     Object val = this.getCellValue(row, entry.getKey());
 
-                    // 如果不存在实例则新建.
-                    entity = (entity == null ? clazz.newInstance() : entity);
                     // 从map中得到对应列的field.
                     Field field = (Field) entry.getValue()[0];
                     Excel attr = (Excel) entry.getValue()[1];

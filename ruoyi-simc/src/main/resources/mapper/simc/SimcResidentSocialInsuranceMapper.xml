@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.simc.mapper.SimcResidentSocialInsuranceMapper">
+  <resultMap id="BaseResultMap" type="com.ruoyi.simc.domain.SimcResidentSocialInsurance">
+    <id column="resident_id_card_no" jdbcType="VARCHAR" property="residentIdCardNo" />
+    <result column="resident_name" jdbcType="VARCHAR" property="residentName" />
+    <result column="resident_sex" jdbcType="INTEGER" property="residentSex" />
+    <result column="resident_brith_date" jdbcType="TIMESTAMP" property="residentBrithDate" />
+    <result column="resident_phone" jdbcType="VARCHAR" property="residentPhone" />
+    <result column="resident_township_district_id" jdbcType="BIGINT" property="residentTownshipDistrictId" />
+    <result column="resident_village_district_id" jdbcType="BIGINT" property="residentVillageDistrictId" />
+    <result column="resident_group_district_id" jdbcType="BIGINT" property="residentGroupDistrictId" />
+    <result column="fll_id" jdbcType="INTEGER" property="fllId" />
+    <result column="fll_project_name" jdbcType="VARCHAR" property="fllProjectName" />
+    <result column="fll_time" jdbcType="VARCHAR" property="fllTime" />
+    <result column="fll_project_is_city_level" jdbcType="INTEGER" property="fllProjectIsCityLevel" />
+    <result column="social_insurance_type" jdbcType="VARCHAR" property="socialInsuranceType" />
+    <result column="social_insurance_state" jdbcType="VARCHAR" property="socialInsuranceState" />
+    <result column="social_insurance_joint_approval_time" jdbcType="TIMESTAMP" property="socialInsuranceJointApprovalTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_user_id" jdbcType="BIGINT" property="modifyUserId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    resident_id_card_no, resident_name, resident_sex, resident_brith_date, resident_phone, 
+    resident_township_district_id, resident_village_district_id, resident_group_district_id, 
+    fll_id, fll_project_name, fll_time, fll_project_is_city_level, social_insurance_type, 
+    social_insurance_state, social_insurance_joint_approval_time, remark, create_user_id, 
+    create_time, modify_user_id, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from simc_resident_social_insurance
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from simc_resident_social_insurance
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ruoyi.simc.domain.SimcResidentSocialInsurance">
+    insert into simc_resident_social_insurance (resident_id_card_no, resident_name, resident_sex, 
+      resident_brith_date, resident_phone, resident_township_district_id, 
+      resident_village_district_id, resident_group_district_id, 
+      fll_id, fll_project_name, fll_time, 
+      fll_project_is_city_level, social_insurance_type, 
+      social_insurance_state, social_insurance_joint_approval_time, 
+      remark, create_user_id, create_time, 
+      modify_user_id, modify_time)
+    values (#{residentIdCardNo,jdbcType=VARCHAR}, #{residentName,jdbcType=VARCHAR}, #{residentSex,jdbcType=INTEGER}, 
+      #{residentBrithDate,jdbcType=TIMESTAMP}, #{residentPhone,jdbcType=VARCHAR}, #{residentTownshipDistrictId,jdbcType=BIGINT}, 
+      #{residentVillageDistrictId,jdbcType=BIGINT}, #{residentGroupDistrictId,jdbcType=BIGINT}, 
+      #{fllId,jdbcType=INTEGER}, #{fllProjectName,jdbcType=VARCHAR}, #{fllTime,jdbcType=VARCHAR}, 
+      #{fllProjectIsCityLevel,jdbcType=INTEGER}, #{socialInsuranceType,jdbcType=VARCHAR}, 
+      #{socialInsuranceState,jdbcType=VARCHAR}, #{socialInsuranceJointApprovalTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ruoyi.simc.domain.SimcResidentSocialInsurance">
+    insert into simc_resident_social_insurance
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="residentIdCardNo != null">
+        resident_id_card_no,
+      </if>
+      <if test="residentName != null">
+        resident_name,
+      </if>
+      <if test="residentSex != null">
+        resident_sex,
+      </if>
+      <if test="residentBrithDate != null">
+        resident_brith_date,
+      </if>
+      <if test="residentPhone != null">
+        resident_phone,
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        resident_township_district_id,
+      </if>
+      <if test="residentVillageDistrictId != null">
+        resident_village_district_id,
+      </if>
+      <if test="residentGroupDistrictId != null">
+        resident_group_district_id,
+      </if>
+      <if test="fllId != null">
+        fll_id,
+      </if>
+      <if test="fllProjectName != null">
+        fll_project_name,
+      </if>
+      <if test="fllTime != null">
+        fll_time,
+      </if>
+      <if test="fllProjectIsCityLevel != null">
+        fll_project_is_city_level,
+      </if>
+      <if test="socialInsuranceType != null">
+        social_insurance_type,
+      </if>
+      <if test="socialInsuranceState != null">
+        social_insurance_state,
+      </if>
+      <if test="socialInsuranceJointApprovalTime != null">
+        social_insurance_joint_approval_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="residentIdCardNo != null">
+        #{residentIdCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="residentName != null">
+        #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="residentSex != null">
+        #{residentSex,jdbcType=INTEGER},
+      </if>
+      <if test="residentBrithDate != null">
+        #{residentBrithDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="residentPhone != null">
+        #{residentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        #{residentTownshipDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentVillageDistrictId != null">
+        #{residentVillageDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentGroupDistrictId != null">
+        #{residentGroupDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="fllId != null">
+        #{fllId,jdbcType=INTEGER},
+      </if>
+      <if test="fllProjectName != null">
+        #{fllProjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="fllTime != null">
+        #{fllTime,jdbcType=VARCHAR},
+      </if>
+      <if test="fllProjectIsCityLevel != null">
+        #{fllProjectIsCityLevel,jdbcType=INTEGER},
+      </if>
+      <if test="socialInsuranceType != null">
+        #{socialInsuranceType,jdbcType=VARCHAR},
+      </if>
+      <if test="socialInsuranceState != null">
+        #{socialInsuranceState,jdbcType=VARCHAR},
+      </if>
+      <if test="socialInsuranceJointApprovalTime != null">
+        #{socialInsuranceJointApprovalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.simc.domain.SimcResidentSocialInsurance">
+    update simc_resident_social_insurance
+    <set>
+      <if test="residentName != null">
+        resident_name = #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="residentSex != null">
+        resident_sex = #{residentSex,jdbcType=INTEGER},
+      </if>
+      <if test="residentBrithDate != null">
+        resident_brith_date = #{residentBrithDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="residentPhone != null">
+        resident_phone = #{residentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentVillageDistrictId != null">
+        resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentGroupDistrictId != null">
+        resident_group_district_id = #{residentGroupDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="fllId != null">
+        fll_id = #{fllId,jdbcType=INTEGER},
+      </if>
+      <if test="fllProjectName != null">
+        fll_project_name = #{fllProjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="fllTime != null">
+        fll_time = #{fllTime,jdbcType=VARCHAR},
+      </if>
+      <if test="fllProjectIsCityLevel != null">
+        fll_project_is_city_level = #{fllProjectIsCityLevel,jdbcType=INTEGER},
+      </if>
+      <if test="socialInsuranceType != null">
+        social_insurance_type = #{socialInsuranceType,jdbcType=VARCHAR},
+      </if>
+      <if test="socialInsuranceState != null">
+        social_insurance_state = #{socialInsuranceState,jdbcType=VARCHAR},
+      </if>
+      <if test="socialInsuranceJointApprovalTime != null">
+        social_insurance_joint_approval_time = #{socialInsuranceJointApprovalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ruoyi.simc.domain.SimcResidentSocialInsurance">
+    update simc_resident_social_insurance
+    set resident_name = #{residentName,jdbcType=VARCHAR},
+      resident_sex = #{residentSex,jdbcType=INTEGER},
+      resident_brith_date = #{residentBrithDate,jdbcType=TIMESTAMP},
+      resident_phone = #{residentPhone,jdbcType=VARCHAR},
+      resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
+      resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},
+      resident_group_district_id = #{residentGroupDistrictId,jdbcType=BIGINT},
+      fll_id = #{fllId,jdbcType=INTEGER},
+      fll_project_name = #{fllProjectName,jdbcType=VARCHAR},
+      fll_time = #{fllTime,jdbcType=VARCHAR},
+      fll_project_is_city_level = #{fllProjectIsCityLevel,jdbcType=INTEGER},
+      social_insurance_type = #{socialInsuranceType,jdbcType=VARCHAR},
+      social_insurance_state = #{socialInsuranceState,jdbcType=VARCHAR},
+      social_insurance_joint_approval_time = #{socialInsuranceJointApprovalTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </update>
+
+  <!--开发人员自定义片段-->
+  <select id="selectList" parameterType="com.ruoyi.simc.domain.SimcResidentSocialInsurance" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from simc_resident_social_insurance
+    <where>
+      <if test="residentName != null and residentName != ''">
+        AND resident_name like concat('%', #{residentName}, '%')
+      </if>
+      <if test="residentPhone != null">
+        AND resident_phone = #{residentPhone}
+      </if>
+      <if test="residentSex != null">
+        AND resident_sex = #{residentSex}
+      </if>
+      <if test="socialInsuranceType != null">
+        AND socialInsurance_type = #{socialInsuranceType}
+      </if>
+      <if test="socialInsuranceState != null">
+        AND socialInsurance_state = #{socialInsuranceState}
+      </if>
+      <if test="params.beginSocialInsuranceJointApprovalTime != null and params.beginSocialInsuranceJointApprovalTime != ''"><!-- 开始时间检索 -->
+        AND social_insurance_joint_approval_time &gt;= #{params.beginSocialInsuranceJointApprovalTime}
+      </if>
+      <if test="params.endSocialInsuranceJointApprovalTime != null and params.endSocialInsuranceJointApprovalTime != ''"><!-- 结束时间检索 -->
+        AND social_insurance_joint_approval_time &lt;= #{params.endSocialInsuranceJointApprovalTime}
+      </if>
+      <if test="fllProjectName != null and fllProjectName != ''">
+        AND fll_project_name like concat('%', #{fllProjectName}, '%')
+      </if>
+    </where>
+    order by resident_township_district_id, resident_village_district_id, resident_group_district_id desc
+  </select>
+</mapper>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.simc.mapper.SimcResidentSocialInsuranceSubsidyMapper">
+  <resultMap id="BaseResultMap" type="com.ruoyi.simc.domain.SimcResidentSocialInsuranceSubsidy">
+    <id column="subsidy_log_id" jdbcType="BIGINT" property="subsidyLogId" />
+    <result column="resident_id_card_no" jdbcType="INTEGER" property="residentIdCardNo" />
+    <result column="resident_name" jdbcType="VARCHAR" property="residentName" />
+    <result column="resident_sex" jdbcType="INTEGER" property="residentSex" />
+    <result column="resident_brith_date" jdbcType="TIMESTAMP" property="residentBrithDate" />
+    <result column="resident_phone" jdbcType="VARCHAR" property="residentPhone" />
+    <result column="resident_township_district_id" jdbcType="BIGINT" property="residentTownshipDistrictId" />
+    <result column="resident_village_district_id" jdbcType="BIGINT" property="residentVillageDistrictId" />
+    <result column="resident_group_district_id" jdbcType="BIGINT" property="residentGroupDistrictId" />
+    <result column="social_insurance_type" jdbcType="VARCHAR" property="socialInsuranceType" />
+    <result column="subsidy_money" jdbcType="DOUBLE" property="subsidyMoney" />
+    <result column="subsidy_time" jdbcType="TIMESTAMP" property="subsidyTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_user_id" jdbcType="BIGINT" property="modifyUserId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    subsidy_log_id, resident_id_card_no, resident_name, resident_sex, resident_brith_date, 
+    resident_phone, resident_township_district_id, resident_village_district_id, resident_group_district_id, 
+    social_insurance_type, subsidy_money, subsidy_time, remark, create_user_id, create_time, 
+    modify_user_id, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from simc_resident_social_insurance_subsidy
+    where subsidy_log_id = #{subsidyLogId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from simc_resident_social_insurance_subsidy
+    where subsidy_log_id = #{subsidyLogId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.ruoyi.simc.domain.SimcResidentSocialInsuranceSubsidy">
+    insert into simc_resident_social_insurance_subsidy (subsidy_log_id, resident_id_card_no, resident_name, 
+      resident_sex, resident_brith_date, resident_phone, 
+      resident_township_district_id, resident_village_district_id, 
+      resident_group_district_id, social_insurance_type, 
+      subsidy_money, subsidy_time, remark, 
+      create_user_id, create_time, modify_user_id, 
+      modify_time)
+    values (#{subsidyLogId,jdbcType=BIGINT}, #{residentIdCardNo,jdbcType=INTEGER}, #{residentName,jdbcType=VARCHAR}, 
+      #{residentSex,jdbcType=INTEGER}, #{residentBrithDate,jdbcType=TIMESTAMP}, #{residentPhone,jdbcType=VARCHAR}, 
+      #{residentTownshipDistrictId,jdbcType=BIGINT}, #{residentVillageDistrictId,jdbcType=BIGINT}, 
+      #{residentGroupDistrictId,jdbcType=BIGINT}, #{socialInsuranceType,jdbcType=VARCHAR}, 
+      #{subsidyMoney,jdbcType=DOUBLE}, #{subsidyTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ruoyi.simc.domain.SimcResidentSocialInsuranceSubsidy">
+    insert into simc_resident_social_insurance_subsidy
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="subsidyLogId != null">
+        subsidy_log_id,
+      </if>
+      <if test="residentIdCardNo != null">
+        resident_id_card_no,
+      </if>
+      <if test="residentName != null">
+        resident_name,
+      </if>
+      <if test="residentSex != null">
+        resident_sex,
+      </if>
+      <if test="residentBrithDate != null">
+        resident_brith_date,
+      </if>
+      <if test="residentPhone != null">
+        resident_phone,
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        resident_township_district_id,
+      </if>
+      <if test="residentVillageDistrictId != null">
+        resident_village_district_id,
+      </if>
+      <if test="residentGroupDistrictId != null">
+        resident_group_district_id,
+      </if>
+      <if test="socialInsuranceType != null">
+        social_insurance_type,
+      </if>
+      <if test="subsidyMoney != null">
+        subsidy_money,
+      </if>
+      <if test="subsidyTime != null">
+        subsidy_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="subsidyLogId != null">
+        #{subsidyLogId,jdbcType=BIGINT},
+      </if>
+      <if test="residentIdCardNo != null">
+        #{residentIdCardNo,jdbcType=INTEGER},
+      </if>
+      <if test="residentName != null">
+        #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="residentSex != null">
+        #{residentSex,jdbcType=INTEGER},
+      </if>
+      <if test="residentBrithDate != null">
+        #{residentBrithDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="residentPhone != null">
+        #{residentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        #{residentTownshipDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentVillageDistrictId != null">
+        #{residentVillageDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentGroupDistrictId != null">
+        #{residentGroupDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="socialInsuranceType != null">
+        #{socialInsuranceType,jdbcType=VARCHAR},
+      </if>
+      <if test="subsidyMoney != null">
+        #{subsidyMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="subsidyTime != null">
+        #{subsidyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.simc.domain.SimcResidentSocialInsuranceSubsidy">
+    update simc_resident_social_insurance_subsidy
+    <set>
+      <if test="residentIdCardNo != null">
+        resident_id_card_no = #{residentIdCardNo,jdbcType=INTEGER},
+      </if>
+      <if test="residentName != null">
+        resident_name = #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="residentSex != null">
+        resident_sex = #{residentSex,jdbcType=INTEGER},
+      </if>
+      <if test="residentBrithDate != null">
+        resident_brith_date = #{residentBrithDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="residentPhone != null">
+        resident_phone = #{residentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentVillageDistrictId != null">
+        resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentGroupDistrictId != null">
+        resident_group_district_id = #{residentGroupDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="socialInsuranceType != null">
+        social_insurance_type = #{socialInsuranceType,jdbcType=VARCHAR},
+      </if>
+      <if test="subsidyMoney != null">
+        subsidy_money = #{subsidyMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="subsidyTime != null">
+        subsidy_time = #{subsidyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where subsidy_log_id = #{subsidyLogId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ruoyi.simc.domain.SimcResidentSocialInsuranceSubsidy">
+    update simc_resident_social_insurance_subsidy
+    set resident_id_card_no = #{residentIdCardNo,jdbcType=INTEGER},
+      resident_name = #{residentName,jdbcType=VARCHAR},
+      resident_sex = #{residentSex,jdbcType=INTEGER},
+      resident_brith_date = #{residentBrithDate,jdbcType=TIMESTAMP},
+      resident_phone = #{residentPhone,jdbcType=VARCHAR},
+      resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
+      resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},
+      resident_group_district_id = #{residentGroupDistrictId,jdbcType=BIGINT},
+      social_insurance_type = #{socialInsuranceType,jdbcType=VARCHAR},
+      subsidy_money = #{subsidyMoney,jdbcType=DOUBLE},
+      subsidy_time = #{subsidyTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where subsidy_log_id = #{subsidyLogId,jdbcType=BIGINT}
+  </update>
+</mapper>
