@@ -5,7 +5,7 @@
     <id column="resident_id_card_no" jdbcType="INTEGER" property="residentIdCardNo" />
     <result column="resident_name" jdbcType="VARCHAR" property="residentName" />
     <result column="resident_sex" jdbcType="INTEGER" property="residentSex" />
-    <result column="resident_brith_date" jdbcType="TIMESTAMP" property="residentBrithDate" />
+    <result column="resident_Birth_date" jdbcType="TIMESTAMP" property="residentBirthDate" />
     <result column="resident_phone" jdbcType="VARCHAR" property="residentPhone" />
     <result column="resident_township_district_id" jdbcType="BIGINT" property="residentTownshipDistrictId" />
     <result column="resident_village_district_id" jdbcType="BIGINT" property="residentVillageDistrictId" />
@@ -23,7 +23,7 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    resident_id_card_no, resident_name, resident_sex, resident_brith_date, resident_phone, 
+    resident_id_card_no, resident_name, resident_sex, resident_Birth_date, resident_phone,
     resident_township_district_id, resident_village_district_id, resident_group_district_id, 
     pay_time, pay_level, pay_monmey, annuity_draw_time, annuity_draw_level, annuity_money, 
     remark, create_user_id, create_time, modify_user_id, modify_time
@@ -40,14 +40,14 @@
   </delete>
   <insert id="insert" parameterType="com.ruoyi.simc.domain.SimcOldLandLosingSubsidy">
     insert into simc_old_land_losing_subsidy (resident_id_card_no, resident_name, resident_sex, 
-      resident_brith_date, resident_phone, resident_township_district_id, 
+      resident_Birth_date, resident_phone, resident_township_district_id,
       resident_village_district_id, resident_group_district_id, 
       pay_time, pay_level, pay_monmey, 
       annuity_draw_time, annuity_draw_level, annuity_money, 
       remark, create_user_id, create_time, 
       modify_user_id, modify_time)
     values (#{residentIdCardNo,jdbcType=INTEGER}, #{residentName,jdbcType=VARCHAR}, #{residentSex,jdbcType=INTEGER}, 
-      #{residentBrithDate,jdbcType=TIMESTAMP}, #{residentPhone,jdbcType=VARCHAR}, #{residentTownshipDistrictId,jdbcType=BIGINT}, 
+      #{residentBirthDate,jdbcType=TIMESTAMP}, #{residentPhone,jdbcType=VARCHAR}, #{residentTownshipDistrictId,jdbcType=BIGINT},
       #{residentVillageDistrictId,jdbcType=BIGINT}, #{residentGroupDistrictId,jdbcType=BIGINT}, 
       #{payTime,jdbcType=TIMESTAMP}, #{payLevel,jdbcType=VARCHAR}, #{payMonmey,jdbcType=DOUBLE}, 
       #{annuityDrawTime,jdbcType=TIMESTAMP}, #{annuityDrawLevel,jdbcType=VARCHAR}, #{annuityMoney,jdbcType=DOUBLE}, 
@@ -66,8 +66,8 @@
       <if test="residentSex != null">
         resident_sex,
       </if>
-      <if test="residentBrithDate != null">
-        resident_brith_date,
+      <if test="residentBirthDate != null">
+        resident_Birth_date,
       </if>
       <if test="residentPhone != null">
         resident_phone,
@@ -125,8 +125,8 @@
       <if test="residentSex != null">
         #{residentSex,jdbcType=INTEGER},
       </if>
-      <if test="residentBrithDate != null">
-        #{residentBrithDate,jdbcType=TIMESTAMP},
+      <if test="residentBirthDate != null">
+        #{residentBirthDate,jdbcType=TIMESTAMP},
       </if>
       <if test="residentPhone != null">
         #{residentPhone,jdbcType=VARCHAR},
@@ -184,8 +184,8 @@
       <if test="residentSex != null">
         resident_sex = #{residentSex,jdbcType=INTEGER},
       </if>
-      <if test="residentBrithDate != null">
-        resident_brith_date = #{residentBrithDate,jdbcType=TIMESTAMP},
+      <if test="residentBirthDate != null">
+        resident_Birth_date = #{residentBirthDate,jdbcType=TIMESTAMP},
       </if>
       <if test="residentPhone != null">
         resident_phone = #{residentPhone,jdbcType=VARCHAR},
@@ -239,7 +239,7 @@
     update simc_old_land_losing_subsidy
     set resident_name = #{residentName,jdbcType=VARCHAR},
       resident_sex = #{residentSex,jdbcType=INTEGER},
-      resident_brith_date = #{residentBrithDate,jdbcType=TIMESTAMP},
+      resident_Birth_date = #{residentBirthDate,jdbcType=TIMESTAMP},
       resident_phone = #{residentPhone,jdbcType=VARCHAR},
       resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
       resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},

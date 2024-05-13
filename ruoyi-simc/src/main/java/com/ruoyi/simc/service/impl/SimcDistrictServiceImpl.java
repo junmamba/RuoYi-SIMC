@@ -155,6 +155,28 @@ public class SimcDistrictServiceImpl implements ISimcDistrictService {
         return this.simcDistrictMapper.selectByDistrictIdList(districtIdList);
     }
 
+    public String getDistrictName(Long townshipDistrictId, Long villageDistrictId, Long groupDistrictId, List<SimcDistrict> simcDistrictList) {
+        SimcDistrict townshipDistrict = getSimcDistrict(simcDistrictList, townshipDistrictId);
+        SimcDistrict villageDistrict = getSimcDistrict(simcDistrictList, villageDistrictId);
+        SimcDistrict groupDistrict = getSimcDistrict(simcDistrictList, groupDistrictId);
+        String townshipDistrictName = null == townshipDistrict ? StringUtils.EMPTY : townshipDistrict.getDistrictName();
+        String villageDistrictName = (null == villageDistrict ? StringUtils.EMPTY : villageDistrict.getDistrictName());
+        String groupDistrictName = null == groupDistrict ? StringUtils.EMPTY : groupDistrict.getDistrictName();
+        return townshipDistrictName + "/" + villageDistrictName + "/" + groupDistrictName;
+    }
+
+    public SimcDistrict getSimcDistrict(List<SimcDistrict> simcDistrictList, Long districtId) {
+        if (null == districtId || districtId <= 0) {
+            return null;
+        }
+        for (int i = 0; null != simcDistrictList && i < simcDistrictList.size(); i++) {
+            if (districtId.longValue() == simcDistrictList.get(i).getDistrictId()) {
+                return simcDistrictList.get(i);
+            }
+        }
+        return null;
+    }
+
     /**
      * 查询柴桑区下级行政区域
      *

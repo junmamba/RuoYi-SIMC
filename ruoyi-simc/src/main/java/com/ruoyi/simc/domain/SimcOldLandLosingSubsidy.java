@@ -9,7 +9,7 @@ public class SimcOldLandLosingSubsidy {
 
     private Integer residentSex;
 
-    private Date residentBrithDate;
+    private Date residentBirthDate;
 
     private String residentPhone;
 
@@ -65,12 +65,12 @@ public class SimcOldLandLosingSubsidy {
         this.residentSex = residentSex;
     }
 
-    public Date getResidentBrithDate() {
-        return residentBrithDate;
+    public Date getResidentBirthDate() {
+        return residentBirthDate;
     }
 
-    public void setResidentBrithDate(Date residentBrithDate) {
-        this.residentBrithDate = residentBrithDate;
+    public void setResidentBirthDate(Date residentBirthDate) {
+        this.residentBirthDate = residentBirthDate;
     }
 
     public String getResidentPhone() {

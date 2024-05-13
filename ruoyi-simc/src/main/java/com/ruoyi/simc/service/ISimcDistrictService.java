@@ -41,6 +41,9 @@ public interface ISimcDistrictService {
      */
     public List<SimcDistrict> queryByDistrictIdList(List<Long> districtIdList) throws Exception;
 
+    public String getDistrictName(Long townshipDistrictId, Long villageDistrictId, Long groupDistrictId, List<SimcDistrict> simcDistrictList);
+
+    public SimcDistrict getSimcDistrict(List<SimcDistrict> simcDistrictList, Long districtId);
     /**
      * 查询柴桑区
      *

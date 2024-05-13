@@ -2,6 +2,8 @@ package com.ruoyi.simc.mapper;
 
 import com.ruoyi.simc.domain.SimcResidentSocialInsuranceSubsidy;
 
+import java.util.List;
+
 public interface SimcResidentSocialInsuranceSubsidyMapper {
     int deleteByPrimaryKey(Long subsidyLogId);
 
@@ -14,4 +16,7 @@ public interface SimcResidentSocialInsuranceSubsidyMapper {
     int updateByPrimaryKeySelective(SimcResidentSocialInsuranceSubsidy record);
 
     int updateByPrimaryKey(SimcResidentSocialInsuranceSubsidy record);
+
+    List<SimcResidentSocialInsuranceSubsidy> selectList(SimcResidentSocialInsuranceSubsidy record);
+
 }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ISimcResidentSocialInsuranceService {
     /**
-     * 查询岗位信息集合
+     * 查询居民社会保险信息
      *
      * @param rsi 岗位信息
      * @return 居民社会保险列表

@@ -31,11 +31,20 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="身份证号码" prop="residentIdCardNo">
+        <el-input
+          v-model="queryParams.residentIdCardNo"
+          style="width: 220px"
+          placeholder="输入身份证号码进行模糊查询"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="联系电话" prop="residentPhone">
         <el-input
           v-model="queryParams.residentPhone"
           style="width: 220px"
-          placeholder="输入联系关键字进行模糊查询"
+          placeholder="输入联系电话关键字进行模糊查询"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -89,19 +98,37 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
+          type="success"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+        >修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="info"
           plain
           icon="el-icon-upload2"
           size="mini"
           @click="handleFileImport"
-          v-hasPermi="['system:user:import']"
         >导入
         </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+        >导出补贴汇总表</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="tableList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="rsiList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="tableDataList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="30" align="center"/>
       <el-table-column label="姓名" align="center" prop="residentName"/>
       <el-table-column label="性别" align="center" prop="residentSex">
@@ -109,6 +136,7 @@
           <dict-tag :options="dict.type.simc_sex" :value="scope.row.residentSex"/>
         </template>
       </el-table-column>
+      <el-table-column label="身份证号码" align="center" prop="residentIdCardNo"/>
       <el-table-column label="联系电话" align="center" prop="residentPhone"/>
       <el-table-column label="行政区域" align="center" prop="districtName"/>
       <el-table-column label="参保类型" align="center" prop="socialInsuranceType">
@@ -127,6 +155,12 @@
       <el-table-column label="市级征地项目" align="center" prop="fllProjectIsCityLevel">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.simc_is_city_level" :value="scope.row.fllProjectIsCityLevel"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="年龄" align="center" prop="age"/>
+      <el-table-column label="退休状态" align="center" prop="retireState">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.simc_retire_state" :value="scope.row.retireState"/>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="status"/>
@@ -175,7 +209,7 @@ import {getToken} from "@/utils/auth";
 
 export default {
   name: "ResidentSocialInsurance",
-  dicts: ['simc_sex', 'simc_insurance_type', 'simc_insurance_state', 'simc_is_city_level'],
+  dicts: ['simc_sex', 'simc_insurance_type', 'simc_insurance_state', 'simc_is_city_level', 'simc_retire_state'],
   data() {
     return {
       // 遮罩层
@@ -192,7 +226,7 @@ export default {
       // 总条数
       total: 0,
       // 居民社保表格数据
-      rsiList: [],
+      tableDataList: [],
       // 日期范围
       socialInsuranceJointApprovalTimeRange: [],
       // 弹出层标题
@@ -218,6 +252,7 @@ export default {
         pageSize: 20,
         districtId: undefined,
         residentName: undefined,
+        residentIdCardNo: undefined,
         residentSex: undefined,
         residentPhone: undefined,
         socialInsuranceType: undefined,
@@ -247,7 +282,7 @@ export default {
     tableList() {
       this.loading = true;
       tableList(this.addDateRange(this.queryParams, this.socialInsuranceJointApprovalTimeRange, 'SocialInsuranceJointApprovalTime')).then(response => {
-        this.rsiList = response.rows;
+        this.tableDataList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -265,10 +300,20 @@ export default {
 
       this.handleQuery();
     },
+    /** 修改按钮操作*/
+    handleUpdate() {
+
+    },
     /** 导入按钮操作 */
     handleFileImport() {
       this.upload.title = "居民社保认定资格登记信息导入";
       this.upload.open = true;
+    },
+    /** 导出按钮操作*/
+    handleExport() {
+      this.download('simc/rsi/export', {
+        ...this.queryParams
+      }, `基本养老保险补贴汇总表_${new Date().getTime()}.xlsx`)
     },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {

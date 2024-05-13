@@ -1,17 +1,19 @@
 package com.ruoyi.simc.domain;
 
+import com.ruoyi.common.core.domain.BaseEntity;
+
 import java.util.Date;
 
-public class SimcResidentSocialInsuranceSubsidy {
+public class SimcResidentSocialInsuranceSubsidy extends BaseEntity {
     private Long subsidyLogId;
 
-    private Integer residentIdCardNo;
+    private String residentIdCardNo;
 
     private String residentName;
 
     private Integer residentSex;
 
-    private Date residentBrithDate;
+    private Date residentBirthDate;
 
     private String residentPhone;
 
@@ -20,6 +22,10 @@ public class SimcResidentSocialInsuranceSubsidy {
     private Long residentVillageDistrictId;
 
     private Long residentGroupDistrictId;
+
+    private Long districtId;
+
+    private String districtName;
 
     private String socialInsuranceType;
 
@@ -37,6 +43,12 @@ public class SimcResidentSocialInsuranceSubsidy {
 
     private Date modifyTime;
 
+    private String age;
+
+    private Integer retireState;
+
+    private String strSubsidyTime;
+
     public Long getSubsidyLogId() {
         return subsidyLogId;
     }
@@ -45,11 +57,11 @@ public class SimcResidentSocialInsuranceSubsidy {
         this.subsidyLogId = subsidyLogId;
     }
 
-    public Integer getResidentIdCardNo() {
+    public String getResidentIdCardNo() {
         return residentIdCardNo;
     }
 
-    public void setResidentIdCardNo(Integer residentIdCardNo) {
+    public void setResidentIdCardNo(String residentIdCardNo) {
         this.residentIdCardNo = residentIdCardNo;
     }
 
@@ -69,12 +81,12 @@ public class SimcResidentSocialInsuranceSubsidy {
         this.residentSex = residentSex;
     }
 
-    public Date getResidentBrithDate() {
-        return residentBrithDate;
+    public Date getResidentBirthDate() {
+        return residentBirthDate;
     }
 
-    public void setResidentBrithDate(Date residentBrithDate) {
-        this.residentBrithDate = residentBrithDate;
+    public void setResidentBirthDate(Date residentBirthDate) {
+        this.residentBirthDate = residentBirthDate;
     }
 
     public String getResidentPhone() {
@@ -107,6 +119,22 @@ public class SimcResidentSocialInsuranceSubsidy {
 
     public void setResidentGroupDistrictId(Long residentGroupDistrictId) {
         this.residentGroupDistrictId = residentGroupDistrictId;
+    }
+
+    public Long getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(Long districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
     }
 
     public String getSocialInsuranceType() {
@@ -171,5 +199,29 @@ public class SimcResidentSocialInsuranceSubsidy {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public Integer getRetireState() {
+        return retireState;
+    }
+
+    public void setRetireState(Integer retireState) {
+        this.retireState = retireState;
+    }
+
+    public String getStrSubsidyTime() {
+        return strSubsidyTime;
+    }
+
+    public void setStrSubsidyTime(String strSubsidyTime) {
+        this.strSubsidyTime = strSubsidyTime;
     }
 }

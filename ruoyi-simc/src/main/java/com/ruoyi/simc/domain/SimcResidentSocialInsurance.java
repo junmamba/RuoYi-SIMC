@@ -1,18 +1,23 @@
 package com.ruoyi.simc.domain;
 
+import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 import java.util.Date;
 
 public class SimcResidentSocialInsurance extends BaseEntity {
+    @Excel(name = "身份证号码", sort = 3, type = Excel.Type.EXPORT)
     private String residentIdCardNo;
 
+    @Excel(name = "姓名", sort = 1, type = Excel.Type.EXPORT)
     private String residentName;
 
+    @Excel(name = "性别", sort = 2, readConverterExp = "0=未知,1=男,2=女", type = Excel.Type.EXPORT)
     private Integer residentSex;
 
-    private Date residentBrithDate;
+    private Date residentBirthDate;
 
+    @Excel(name = "电话", sort = 5, type = Excel.Type.EXPORT)
     private String residentPhone;
 
     private Long residentTownshipDistrictId;
@@ -23,22 +28,29 @@ public class SimcResidentSocialInsurance extends BaseEntity {
 
     private Long districtId;
 
+    @Excel(name = "行政区域", sort = 4, type = Excel.Type.EXPORT)
     private String districtName;
 
     private Integer fllId;
 
+    @Excel(name = "征地项目名称", sort = 6, type = Excel.Type.EXPORT)
     private String fllProjectName;
 
+    @Excel(name = "征地时间", sort = 8, type = Excel.Type.EXPORT)
     private String fllTime;
 
+    @Excel(name = "是否市级征地项目", sort = 7, readConverterExp = "0=否,1=是", type = Excel.Type.EXPORT)
     private Integer fllProjectIsCityLevel;
 
+    @Excel(name = "参保类别", sort = 10, readConverterExp = "1=城镇职工,2=城乡居民", type = Excel.Type.EXPORT)
     private String socialInsuranceType;
 
+    @Excel(name = "参保状态", sort = 11, readConverterExp = "1=在职,2=退休,3=死亡,4=退出,99=其他", type = Excel.Type.EXPORT)
     private String socialInsuranceState;
 
     private Date socialInsuranceJointApprovalTime;
 
+    @Excel(name = "联审联批通过时间", sort = 9, type = Excel.Type.EXPORT)
     private String strSocialInsuranceJointApprovalTime;
 
     private String remark;
@@ -50,6 +62,18 @@ public class SimcResidentSocialInsurance extends BaseEntity {
     private Long modifyUserId;
 
     private Date modifyTime;
+
+    @Excel(name = "年龄", sort = 12, type = Excel.Type.EXPORT)
+    private String age;
+
+    @Excel(name = "退休状态", sort = 13, readConverterExp = "0=未退休,1=即将退休,2=退休", type = Excel.Type.EXPORT)
+    private Integer retireState;
+
+    @Excel(name = "补贴年月", sort = 14, type = Excel.Type.EXPORT)
+    private String subsidyTime;
+
+    @Excel(name = "补贴金额", sort = 15, type = Excel.Type.EXPORT)
+    private String subsidyMoney;
 
     public String getResidentIdCardNo() {
         return residentIdCardNo;
@@ -75,12 +99,12 @@ public class SimcResidentSocialInsurance extends BaseEntity {
         this.residentSex = residentSex;
     }
 
-    public Date getResidentBrithDate() {
-        return residentBrithDate;
+    public Date getResidentBirthDate() {
+        return residentBirthDate;
     }
 
-    public void setResidentBrithDate(Date residentBrithDate) {
-        this.residentBrithDate = residentBrithDate;
+    public void setResidentBirthDate(Date residentBirthDate) {
+        this.residentBirthDate = residentBirthDate;
     }
 
     public String getResidentPhone() {
@@ -233,5 +257,37 @@ public class SimcResidentSocialInsurance extends BaseEntity {
 
     public void setStrSocialInsuranceJointApprovalTime(String strSocialInsuranceJointApprovalTime) {
         this.strSocialInsuranceJointApprovalTime = strSocialInsuranceJointApprovalTime;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public Integer getRetireState() {
+        return retireState;
+    }
+
+    public void setRetireState(Integer retireState) {
+        this.retireState = retireState;
+    }
+
+    public String getSubsidyTime() {
+        return subsidyTime;
+    }
+
+    public void setSubsidyTime(String subsidyTime) {
+        this.subsidyTime = subsidyTime;
+    }
+
+    public String getSubsidyMoney() {
+        return subsidyMoney;
+    }
+
+    public void setSubsidyMoney(String subsidyMoney) {
+        this.subsidyMoney = subsidyMoney;
     }
 }
