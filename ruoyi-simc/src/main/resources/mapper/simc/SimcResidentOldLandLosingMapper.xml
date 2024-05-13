@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.simc.mapper.SimcResidentOldLandLosingMapper">
+  <resultMap id="BaseResultMap" type="com.ruoyi.simc.domain.SimcResidentOldLandLosing">
+    <id column="resident_id_card_no" jdbcType="VARCHAR" property="residentIdCardNo" />
+    <result column="resident_name" jdbcType="VARCHAR" property="residentName" />
+    <result column="resident_sex" jdbcType="INTEGER" property="residentSex" />
+    <result column="resident_birth_date" jdbcType="TIMESTAMP" property="residentBirthDate" />
+    <result column="resident_phone" jdbcType="VARCHAR" property="residentPhone" />
+    <result column="resident_township_district_id" jdbcType="BIGINT" property="residentTownshipDistrictId" />
+    <result column="resident_village_district_id" jdbcType="BIGINT" property="residentVillageDistrictId" />
+    <result column="resident_group_district_id" jdbcType="BIGINT" property="residentGroupDistrictId" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="pay_level" jdbcType="VARCHAR" property="payLevel" />
+    <result column="pay_money" jdbcType="DOUBLE" property="payMoney" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="bank_code" jdbcType="VARCHAR" property="bankCode" />
+    <result column="the_first_receive_time" jdbcType="TIMESTAMP" property="theFirstReceiveTime" />
+    <result column="the_first_year_per_month_receive_money" jdbcType="DOUBLE" property="theFirstYearPerMonthReceiveMoney" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="quit_time" jdbcType="TIMESTAMP" property="quitTime" />
+    <result column="social_insurance_remark" jdbcType="VARCHAR" property="socialInsuranceRemark" />
+    <result column="social_insurance_time" jdbcType="TIMESTAMP" property="socialInsuranceTime" />
+    <result column="die_time" jdbcType="TIMESTAMP" property="dieTime" />
+    <result column="return_fee_state" jdbcType="VARCHAR" property="returnFeeState" />
+    <result column="return_fee" jdbcType="DOUBLE" property="returnFee" />
+    <result column="return_fee_time" jdbcType="TIMESTAMP" property="returnFeeTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_user_id" jdbcType="BIGINT" property="modifyUserId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    resident_id_card_no, resident_name, resident_sex, resident_birth_date, resident_phone, 
+    resident_township_district_id, resident_village_district_id, resident_group_district_id, 
+    pay_time, pay_level, pay_money, bank, bank_code, the_first_receive_time, the_first_year_per_month_receive_money, 
+    state, quit_time, social_insurance_remark, social_insurance_time, die_time, return_fee_state, 
+    return_fee, return_fee_time, remark, create_user_id, create_time, modify_user_id, 
+    modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from simc_resident_old_land_losing
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from simc_resident_old_land_losing
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ruoyi.simc.domain.SimcResidentOldLandLosing">
+    insert into simc_resident_old_land_losing (resident_id_card_no, resident_name, resident_sex,
+                                               resident_birth_date, resident_phone, resident_township_district_id,
+                                               resident_village_district_id, resident_group_district_id,
+                                               pay_time, pay_level, pay_money,
+                                               bank, bank_code, the_first_receive_time,
+                                               the_first_year_per_month_receive_money, state,
+                                               quit_time, social_insurance_remark, social_insurance_time,
+                                               die_time, return_fee_state, return_fee,
+                                               return_fee_time, remark, create_user_id,
+                                               create_time, modify_user_id, modify_time
+    )
+    values (#{residentIdCardNo,jdbcType=VARCHAR}, #{residentName,jdbcType=VARCHAR}, #{residentSex,jdbcType=INTEGER},
+            #{residentBirthDate,jdbcType=TIMESTAMP}, #{residentPhone,jdbcType=VARCHAR}, #{residentTownshipDistrictId,jdbcType=BIGINT},
+            #{residentVillageDistrictId,jdbcType=BIGINT}, #{residentGroupDistrictId,jdbcType=BIGINT},
+            #{payTime,jdbcType=TIMESTAMP}, #{payLevel,jdbcType=VARCHAR}, #{payMoney,jdbcType=DOUBLE},
+            #{bank,jdbcType=VARCHAR}, #{bankCode,jdbcType=VARCHAR}, #{theFirstReceiveTime,jdbcType=TIMESTAMP},
+            #{theFirstYearPerMonthReceiveMoney,jdbcType=DOUBLE}, #{state,jdbcType=VARCHAR},
+            #{quitTime,jdbcType=TIMESTAMP}, #{socialInsuranceRemark,jdbcType=VARCHAR}, #{socialInsuranceTime,jdbcType=TIMESTAMP},
+            #{dieTime,jdbcType=TIMESTAMP}, #{returnFeeState,jdbcType=VARCHAR}, #{returnFee,jdbcType=DOUBLE},
+            #{returnFeeTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT},
+            #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP}
+           )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ruoyi.simc.domain.SimcResidentOldLandLosing">
+    insert into simc_resident_old_land_losing
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="residentIdCardNo != null">
+        resident_id_card_no,
+      </if>
+      <if test="residentName != null">
+        resident_name,
+      </if>
+      <if test="residentSex != null">
+        resident_sex,
+      </if>
+      <if test="residentBirthDate != null">
+        resident_birth_date,
+      </if>
+      <if test="residentPhone != null">
+        resident_phone,
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        resident_township_district_id,
+      </if>
+      <if test="residentVillageDistrictId != null">
+        resident_village_district_id,
+      </if>
+      <if test="residentGroupDistrictId != null">
+        resident_group_district_id,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="payLevel != null">
+        pay_level,
+      </if>
+      <if test="payMoney != null">
+        pay_money,
+      </if>
+      <if test="bank != null">
+        bank,
+      </if>
+      <if test="bankCode != null">
+        bank_code,
+      </if>
+      <if test="theFirstReceiveTime != null">
+        the_first_receive_time,
+      </if>
+      <if test="theFirstYearPerMonthReceiveMoney != null">
+        the_first_year_per_month_receive_money,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="quitTime != null">
+        quit_time,
+      </if>
+      <if test="socialInsuranceRemark != null">
+        social_insurance_remark,
+      </if>
+      <if test="socialInsuranceTime != null">
+        social_insurance_time,
+      </if>
+      <if test="dieTime != null">
+        die_time,
+      </if>
+      <if test="returnFeeState != null">
+        return_fee_state,
+      </if>
+      <if test="returnFee != null">
+        return_fee,
+      </if>
+      <if test="returnFeeTime != null">
+        return_fee_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="residentIdCardNo != null">
+        #{residentIdCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="residentName != null">
+        #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="residentSex != null">
+        #{residentSex,jdbcType=INTEGER},
+      </if>
+      <if test="residentBirthDate != null">
+        #{residentBirthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="residentPhone != null">
+        #{residentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        #{residentTownshipDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentVillageDistrictId != null">
+        #{residentVillageDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentGroupDistrictId != null">
+        #{residentGroupDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payLevel != null">
+        #{payLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="payMoney != null">
+        #{payMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="bank != null">
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCode != null">
+        #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="theFirstReceiveTime != null">
+        #{theFirstReceiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="theFirstYearPerMonthReceiveMoney != null">
+        #{theFirstYearPerMonthReceiveMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="quitTime != null">
+        #{quitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="socialInsuranceRemark != null">
+        #{socialInsuranceRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="socialInsuranceTime != null">
+        #{socialInsuranceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dieTime != null">
+        #{dieTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnFeeState != null">
+        #{returnFeeState,jdbcType=VARCHAR},
+      </if>
+      <if test="returnFee != null">
+        #{returnFee,jdbcType=DOUBLE},
+      </if>
+      <if test="returnFeeTime != null">
+        #{returnFeeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.simc.domain.SimcResidentOldLandLosing">
+    update simc_resident_old_land_losing
+    <set>
+      <if test="residentName != null">
+        resident_name = #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="residentSex != null">
+        resident_sex = #{residentSex,jdbcType=INTEGER},
+      </if>
+      <if test="residentBirthDate != null">
+        resident_birth_date = #{residentBirthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="residentPhone != null">
+        resident_phone = #{residentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentVillageDistrictId != null">
+        resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentGroupDistrictId != null">
+        resident_group_district_id = #{residentGroupDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payLevel != null">
+        pay_level = #{payLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="payMoney != null">
+        pay_money = #{payMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="bank != null">
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCode != null">
+        bank_code = #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="theFirstReceiveTime != null">
+        the_first_receive_time = #{theFirstReceiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="theFirstYearPerMonthReceiveMoney != null">
+        the_first_year_per_month_receive_money = #{theFirstYearPerMonthReceiveMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="quitTime != null">
+        quit_time = #{quitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="socialInsuranceRemark != null">
+        social_insurance_remark = #{socialInsuranceRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="socialInsuranceTime != null">
+        social_insurance_time = #{socialInsuranceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dieTime != null">
+        die_time = #{dieTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnFeeState != null">
+        return_fee_state = #{returnFeeState,jdbcType=VARCHAR},
+      </if>
+      <if test="returnFee != null">
+        return_fee = #{returnFee,jdbcType=DOUBLE},
+      </if>
+      <if test="returnFeeTime != null">
+        return_fee_time = #{returnFeeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ruoyi.simc.domain.SimcResidentOldLandLosing">
+    update simc_resident_old_land_losing
+    set resident_name = #{residentName,jdbcType=VARCHAR},
+        resident_sex = #{residentSex,jdbcType=INTEGER},
+        resident_birth_date = #{residentBirthDate,jdbcType=TIMESTAMP},
+        resident_phone = #{residentPhone,jdbcType=VARCHAR},
+        resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
+        resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},
+        resident_group_district_id = #{residentGroupDistrictId,jdbcType=BIGINT},
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+        pay_level = #{payLevel,jdbcType=VARCHAR},
+        pay_money = #{payMoney,jdbcType=DOUBLE},
+        bank = #{bank,jdbcType=VARCHAR},
+        bank_code = #{bankCode,jdbcType=VARCHAR},
+        the_first_receive_time = #{theFirstReceiveTime,jdbcType=TIMESTAMP},
+        the_first_year_per_month_receive_money = #{theFirstYearPerMonthReceiveMoney,jdbcType=DOUBLE},
+        state = #{state,jdbcType=VARCHAR},
+        quit_time = #{quitTime,jdbcType=TIMESTAMP},
+        social_insurance_remark = #{socialInsuranceRemark,jdbcType=VARCHAR},
+        social_insurance_time = #{socialInsuranceTime,jdbcType=TIMESTAMP},
+        die_time = #{dieTime,jdbcType=TIMESTAMP},
+        return_fee_state = #{returnFeeState,jdbcType=VARCHAR},
+        return_fee = #{returnFee,jdbcType=DOUBLE},
+        return_fee_time = #{returnFeeTime,jdbcType=TIMESTAMP},
+        remark = #{remark,jdbcType=VARCHAR},
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </update>
+</mapper>

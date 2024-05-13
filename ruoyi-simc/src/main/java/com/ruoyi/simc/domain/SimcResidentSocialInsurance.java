@@ -12,7 +12,7 @@ public class SimcResidentSocialInsurance extends BaseEntity {
     @Excel(name = "姓名", sort = 1, type = Excel.Type.EXPORT)
     private String residentName;
 
-    @Excel(name = "性别", sort = 2, readConverterExp = "0=未知,1=男,2=女", type = Excel.Type.EXPORT)
+    @Excel(name = "性别", sort = 2, readConverterExp = "1=男,2=女", type = Excel.Type.EXPORT)
     private Integer residentSex;
 
     private Date residentBirthDate;

@@ -2,8 +2,8 @@ package com.ruoyi.simc.domain;
 
 import java.util.Date;
 
-public class SimcOldLandLosingSubsidy {
-    private Integer residentIdCardNo;
+public class SimcResidentOldLandLosing {
+    private String residentIdCardNo;
 
     private String residentName;
 
@@ -23,13 +23,31 @@ public class SimcOldLandLosingSubsidy {
 
     private String payLevel;
 
-    private Double payMonmey;
+    private Double payMoney;
 
-    private Date annuityDrawTime;
+    private String bank;
 
-    private String annuityDrawLevel;
+    private String bankCode;
 
-    private Double annuityMoney;
+    private Date theFirstReceiveTime;
+
+    private Double theFirstYearPerMonthReceiveMoney;
+
+    private String state;
+
+    private Date quitTime;
+
+    private String socialInsuranceRemark;
+
+    private Date socialInsuranceTime;
+
+    private Date dieTime;
+
+    private String returnFeeState;
+
+    private Double returnFee;
+
+    private Date returnFeeTime;
 
     private String remark;
 
@@ -41,12 +59,12 @@ public class SimcOldLandLosingSubsidy {
 
     private Date modifyTime;
 
-    public Integer getResidentIdCardNo() {
+    public String getResidentIdCardNo() {
         return residentIdCardNo;
     }
 
-    public void setResidentIdCardNo(Integer residentIdCardNo) {
-        this.residentIdCardNo = residentIdCardNo;
+    public void setResidentIdCardNo(String residentIdCardNo) {
+        this.residentIdCardNo = residentIdCardNo == null ? null : residentIdCardNo.trim();
     }
 
     public String getResidentName() {
@@ -121,36 +139,108 @@ public class SimcOldLandLosingSubsidy {
         this.payLevel = payLevel == null ? null : payLevel.trim();
     }
 
-    public Double getPayMonmey() {
-        return payMonmey;
+    public Double getPayMoney() {
+        return payMoney;
     }
 
-    public void setPayMonmey(Double payMonmey) {
-        this.payMonmey = payMonmey;
+    public void setPayMoney(Double payMoney) {
+        this.payMoney = payMoney;
     }
 
-    public Date getAnnuityDrawTime() {
-        return annuityDrawTime;
+    public String getBank() {
+        return bank;
     }
 
-    public void setAnnuityDrawTime(Date annuityDrawTime) {
-        this.annuityDrawTime = annuityDrawTime;
+    public void setBank(String bank) {
+        this.bank = bank == null ? null : bank.trim();
     }
 
-    public String getAnnuityDrawLevel() {
-        return annuityDrawLevel;
+    public String getBankCode() {
+        return bankCode;
     }
 
-    public void setAnnuityDrawLevel(String annuityDrawLevel) {
-        this.annuityDrawLevel = annuityDrawLevel == null ? null : annuityDrawLevel.trim();
+    public void setBankCode(String bankCode) {
+        this.bankCode = bankCode == null ? null : bankCode.trim();
     }
 
-    public Double getAnnuityMoney() {
-        return annuityMoney;
+    public Date getTheFirstReceiveTime() {
+        return theFirstReceiveTime;
     }
 
-    public void setAnnuityMoney(Double annuityMoney) {
-        this.annuityMoney = annuityMoney;
+    public void setTheFirstReceiveTime(Date theFirstReceiveTime) {
+        this.theFirstReceiveTime = theFirstReceiveTime;
+    }
+
+    public Double getTheFirstYearPerMonthReceiveMoney() {
+        return theFirstYearPerMonthReceiveMoney;
+    }
+
+    public void setTheFirstYearPerMonthReceiveMoney(Double theFirstYearPerMonthReceiveMoney) {
+        this.theFirstYearPerMonthReceiveMoney = theFirstYearPerMonthReceiveMoney;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state == null ? null : state.trim();
+    }
+
+    public Date getQuitTime() {
+        return quitTime;
+    }
+
+    public void setQuitTime(Date quitTime) {
+        this.quitTime = quitTime;
+    }
+
+    public String getSocialInsuranceRemark() {
+        return socialInsuranceRemark;
+    }
+
+    public void setSocialInsuranceRemark(String socialInsuranceRemark) {
+        this.socialInsuranceRemark = socialInsuranceRemark == null ? null : socialInsuranceRemark.trim();
+    }
+
+    public Date getSocialInsuranceTime() {
+        return socialInsuranceTime;
+    }
+
+    public void setSocialInsuranceTime(Date socialInsuranceTime) {
+        this.socialInsuranceTime = socialInsuranceTime;
+    }
+
+    public Date getDieTime() {
+        return dieTime;
+    }
+
+    public void setDieTime(Date dieTime) {
+        this.dieTime = dieTime;
+    }
+
+    public String getReturnFeeState() {
+        return returnFeeState;
+    }
+
+    public void setReturnFeeState(String returnFeeState) {
+        this.returnFeeState = returnFeeState == null ? null : returnFeeState.trim();
+    }
+
+    public Double getReturnFee() {
+        return returnFee;
+    }
+
+    public void setReturnFee(Double returnFee) {
+        this.returnFee = returnFee;
+    }
+
+    public Date getReturnFeeTime() {
+        return returnFeeTime;
+    }
+
+    public void setReturnFeeTime(Date returnFeeTime) {
+        this.returnFeeTime = returnFeeTime;
     }
 
     public String getRemark() {

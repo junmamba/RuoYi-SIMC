@@ -49,19 +49,9 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="参保类型" prop="socialInsuranceType">
-        <el-select v-model="queryParams.socialInsuranceType" style="width: 220px" clearable>
-          <el-option
-            v-for="dict in dict.type.simc_insurance_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="补贴年月" prop="subsidyTime">
+      <el-form-item label="缴费时间" prop="payTime">
         <el-date-picker
-          v-model="subsidyTimeRange"
+          v-model="payTimeRange"
           style="width: 220px"
           value-format="yyyy-MM"
           type="daterange"
@@ -69,6 +59,36 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         ></el-date-picker>
+      </el-form-item>
+      <el-form-item label="缴费档次" prop="payLevel">
+        <el-select v-model="queryParams.payLevel" style="width: 220px" clearable>
+          <el-option
+            v-for="dict in dict.type.simc_pay_level"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="状态" prop="state">
+        <el-select v-model="queryParams.state" style="width: 220px" clearable>
+          <el-option
+            v-for="dict in dict.type.simc_resident_old_land_losing_state"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="退费状态" prop="returnFeeState">
+        <el-select v-model="queryParams.returnFeeState" style="width: 220px" clearable>
+          <el-option
+            v-for="dict in dict.type.simc_return_fee_state"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -101,19 +121,21 @@
       <el-table-column label="身份证号码" align="center" prop="residentIdCardNo"/>
       <el-table-column label="联系电话" align="center" prop="residentPhone"/>
       <el-table-column label="行政区域" align="center" prop="districtName"/>
-      <el-table-column label="参保类型" align="center" prop="socialInsuranceType">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.simc_insurance_type" :value="scope.row.socialInsuranceType"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="年龄" align="center" prop="age"/>
-      <el-table-column label="退休状态" align="center" prop="retireState">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.simc_retire_state" :value="scope.row.retireState"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="补贴年月" align="center" prop="strSubsidyTime"/>
-      <el-table-column label="补贴金额" align="center" prop="subsidyMoney"/>
+      <el-table-column label="缴费时间" align="center" prop="payTime"></el-table-column>
+      <el-table-column label="缴费档次" align="center" prop="payLevel"/>
+      <el-table-column label="缴费金额" align="center" prop="payMoney"></el-table-column>
+      <el-table-column label="开户行" align="center" prop="bank"/>
+      <el-table-column label="银行卡号" align="center" prop="bankCode"/>
+      <el-table-column label="首次领取时间" align="center" prop="theFirstReceiveTime"/>
+      <el-table-column label="状态" align="center" prop="state"/>
+      <el-table-column label="退出时间" align="center" prop="quitTime"/>
+      <el-table-column label="参保情况" align="center" prop="socialInsuranceRemark"/>
+      <el-table-column label="参保时间" align="center" prop="socialInsuranceTime"/>
+      <el-table-column label="死亡时间" align="center" prop="dieTime"/>
+      <el-table-column label="退费状态" align="center" prop="returnFeeState"/>
+      <el-table-column label="退费金额" align="center" prop="returnFee"/>
+      <el-table-column label="退费时间" align="center" prop="returnFeeTime"/>
+      <el-table-column label="备注" align="center" prop="remark"/>
     </el-table>
 
     <pagination
@@ -158,8 +180,8 @@ import {listChaiSangDistrict} from "@/api/simc/district";
 import {getToken} from "@/utils/auth";
 
 export default {
-  name: "ResidentSocialInsuranceSubsidy",
-  dicts: ['simc_sex', 'simc_insurance_type', 'simc_retire_state'],
+  name: "ResidentOldLandLosing",
+  dicts: ['simc_sex', 'simc_pay_level', 'simc_resident_old_land_losing_state', 'simc_return_fee_state'],
   data() {
     return {
       // 遮罩层
@@ -178,7 +200,7 @@ export default {
       // 居民社保表格数据
       tableDataList: [],
       // 日期范围
-      subsidyTimeRange: [],
+      payTimeRange: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -202,12 +224,12 @@ export default {
         pageSize: 20,
         districtId: undefined,
         residentName: undefined,
-        residentIdCardNo: undefined,
         residentSex: undefined,
+        residentIdCardNo: undefined,
         residentPhone: undefined,
-        socialInsuranceType: undefined,
-        socialInsuranceState: undefined,
-        fllProjectName: undefined
+        payLevel: undefined,
+        state: undefined,
+        returnFeeState: undefined
       },
       districtProps: {
         value: 'id',
@@ -232,7 +254,7 @@ export default {
     /** 查询居民基本养老保险补贴列表 */
     tableList() {
       this.loading = true;
-      tableList(this.addDateRange(this.queryParams, this.subsidyTimeRange, 'SubsidyTime')).then(response => {
+      tableList(this.addDateRange(this.queryParams, this.payTimeRange, 'PayTime')).then(response => {
         this.tableDataList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -247,7 +269,7 @@ export default {
     resetQuery() {
       this.queryParams.districtId = [];
       this.resetForm("queryForm");
-      this.subsidyTimeRange = [];
+      this.payTimeRange = [];
 
       this.handleQuery();
     },
