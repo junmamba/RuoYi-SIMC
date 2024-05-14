@@ -5,6 +5,7 @@
     <id column="family_no" jdbcType="VARCHAR" property="familyNo" />
     <result column="family_name" jdbcType="VARCHAR" property="familyName" />
     <result column="family_head" jdbcType="VARCHAR" property="familyHead" />
+    <result column="family_head_resident_name" jdbcType="VARCHAR" property="familyHeadResidentName" />
     <result column="township_district_id" jdbcType="BIGINT" property="townshipDistrictId" />
     <result column="village_district_id" jdbcType="BIGINT" property="villageDistrictId" />
     <result column="group_district_id" jdbcType="BIGINT" property="groupDistrictId" />
@@ -15,8 +16,9 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    family_no, family_name, family_head, township_district_id, village_district_id, group_district_id, 
-    remark, create_user_id, create_time, modify_user_id, modify_time
+    family_no, family_name, family_head, family_head_resident_name, township_district_id, 
+    village_district_id, group_district_id, remark, create_user_id, create_time, modify_user_id, 
+    modify_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -30,13 +32,15 @@
   </delete>
   <insert id="insert" parameterType="com.ruoyi.simc.domain.SimcFamily">
     insert into simc_family (family_no, family_name, family_head, 
-      township_district_id, village_district_id, group_district_id, 
-      remark, create_user_id, create_time, 
-      modify_user_id, modify_time)
+      family_head_resident_name, township_district_id, 
+      village_district_id, group_district_id, remark, 
+      create_user_id, create_time, modify_user_id, 
+      modify_time)
     values (#{familyNo,jdbcType=VARCHAR}, #{familyName,jdbcType=VARCHAR}, #{familyHead,jdbcType=VARCHAR}, 
-      #{townshipDistrictId,jdbcType=BIGINT}, #{villageDistrictId,jdbcType=BIGINT}, #{groupDistrictId,jdbcType=BIGINT}, 
-      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP})
+      #{familyHeadResidentName,jdbcType=VARCHAR}, #{townshipDistrictId,jdbcType=BIGINT}, 
+      #{villageDistrictId,jdbcType=BIGINT}, #{groupDistrictId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ruoyi.simc.domain.SimcFamily">
     insert into simc_family
@@ -49,6 +53,9 @@
       </if>
       <if test="familyHead != null">
         family_head,
+      </if>
+      <if test="familyHeadResidentName != null">
+        family_head_resident_name,
       </if>
       <if test="townshipDistrictId != null">
         township_district_id,
@@ -85,6 +92,9 @@
       <if test="familyHead != null">
         #{familyHead,jdbcType=VARCHAR},
       </if>
+      <if test="familyHeadResidentName != null">
+        #{familyHeadResidentName,jdbcType=VARCHAR},
+      </if>
       <if test="townshipDistrictId != null">
         #{townshipDistrictId,jdbcType=BIGINT},
       </if>
@@ -120,6 +130,9 @@
       <if test="familyHead != null">
         family_head = #{familyHead,jdbcType=VARCHAR},
       </if>
+      <if test="familyHeadResidentName != null">
+        family_head_resident_name = #{familyHeadResidentName,jdbcType=VARCHAR},
+      </if>
       <if test="townshipDistrictId != null">
         township_district_id = #{townshipDistrictId,jdbcType=BIGINT},
       </if>
@@ -151,6 +164,7 @@
     update simc_family
     set family_name = #{familyName,jdbcType=VARCHAR},
       family_head = #{familyHead,jdbcType=VARCHAR},
+      family_head_resident_name = #{familyHeadResidentName,jdbcType=VARCHAR},
       township_district_id = #{townshipDistrictId,jdbcType=BIGINT},
       village_district_id = #{villageDistrictId,jdbcType=BIGINT},
       group_district_id = #{groupDistrictId,jdbcType=BIGINT},

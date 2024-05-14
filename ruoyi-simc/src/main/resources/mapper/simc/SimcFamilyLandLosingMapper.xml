@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.ruoyi.simc.domain.SimcFamilyLandLosing">
     <id column="fll_id" jdbcType="INTEGER" property="fllId" />
     <result column="family_no" jdbcType="VARCHAR" property="familyNo" />
+    <result column="head_resident_name" jdbcType="VARCHAR" property="headResidentName" />
     <result column="fll_family_member_number" jdbcType="INTEGER" property="fllFamilyMemberNumber" />
     <result column="fll_eligible_member_number" jdbcType="INTEGER" property="fllEligibleMemberNumber" />
     <result column="original_agricultural_acreage" jdbcType="DOUBLE" property="originalAgriculturalAcreage" />
@@ -21,10 +22,10 @@
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    fll_id, family_no, fll_family_member_number, fll_eligible_member_number, original_agricultural_acreage, 
-    fll_total_agricultural_acreage, current_agricultural_acreage, per_agricultural_acreage, 
-    project_id, project_name, project_is_city_level, fll_time, remark, create_user_id, 
-    create_time, modify_user_id, modify_time
+    fll_id, family_no, head_resident_name, fll_family_member_number, fll_eligible_member_number, 
+    original_agricultural_acreage, fll_total_agricultural_acreage, current_agricultural_acreage, 
+    per_agricultural_acreage, project_id, project_name, project_is_city_level, fll_time, 
+    remark, create_user_id, create_time, modify_user_id, modify_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -37,20 +38,22 @@
     where fll_id = #{fllId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.ruoyi.simc.domain.SimcFamilyLandLosing" useGeneratedKeys="true" keyProperty="fllId">
-    insert into simc_family_land_losing (fll_id, family_no, fll_family_member_number, 
-      fll_eligible_member_number, original_agricultural_acreage, 
-      fll_total_agricultural_acreage, current_agricultural_acreage, 
-      per_agricultural_acreage, project_id, project_name, 
-      project_is_city_level, fll_time, remark, 
-      create_user_id, create_time, modify_user_id, 
-      modify_time)
-    values (#{fllId,jdbcType=INTEGER}, #{familyNo,jdbcType=VARCHAR}, #{fllFamilyMemberNumber,jdbcType=INTEGER}, 
-      #{fllEligibleMemberNumber,jdbcType=INTEGER}, #{originalAgriculturalAcreage,jdbcType=DOUBLE}, 
-      #{fllTotalAgriculturalAcreage,jdbcType=DOUBLE}, #{currentAgriculturalAcreage,jdbcType=DOUBLE}, 
-      #{perAgriculturalAcreage,jdbcType=DOUBLE}, #{projectId,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, 
-      #{projectIsCityLevel,jdbcType=INTEGER}, #{fllTime,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, 
-      #{modifyTime,jdbcType=TIMESTAMP})
+    insert into simc_family_land_losing (fll_id, family_no, head_resident_name, 
+      fll_family_member_number, fll_eligible_member_number, 
+      original_agricultural_acreage, fll_total_agricultural_acreage, 
+      current_agricultural_acreage, per_agricultural_acreage, 
+      project_id, project_name, project_is_city_level, 
+      fll_time, remark, create_user_id, 
+      create_time, modify_user_id, modify_time
+      )
+    values (#{fllId,jdbcType=INTEGER}, #{familyNo,jdbcType=VARCHAR}, #{headResidentName,jdbcType=VARCHAR}, 
+      #{fllFamilyMemberNumber,jdbcType=INTEGER}, #{fllEligibleMemberNumber,jdbcType=INTEGER}, 
+      #{originalAgriculturalAcreage,jdbcType=DOUBLE}, #{fllTotalAgriculturalAcreage,jdbcType=DOUBLE}, 
+      #{currentAgriculturalAcreage,jdbcType=DOUBLE}, #{perAgriculturalAcreage,jdbcType=DOUBLE}, 
+      #{projectId,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{projectIsCityLevel,jdbcType=INTEGER}, 
+      #{fllTime,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ruoyi.simc.domain.SimcFamilyLandLosing" useGeneratedKeys="true" keyProperty="fllId">
     insert into simc_family_land_losing
@@ -60,6 +63,9 @@
       </if>
       <if test="familyNo != null">
         family_no,
+      </if>
+      <if test="headResidentName != null">
+        head_resident_name,
       </if>
       <if test="fllFamilyMemberNumber != null">
         fll_family_member_number,
@@ -114,6 +120,9 @@
       <if test="familyNo != null">
         #{familyNo,jdbcType=VARCHAR},
       </if>
+      <if test="headResidentName != null">
+        #{headResidentName,jdbcType=VARCHAR},
+      </if>
       <if test="fllFamilyMemberNumber != null">
         #{fllFamilyMemberNumber,jdbcType=INTEGER},
       </if>
@@ -167,6 +176,9 @@
       <if test="familyNo != null">
         family_no = #{familyNo,jdbcType=VARCHAR},
       </if>
+      <if test="headResidentName != null">
+        head_resident_name = #{headResidentName,jdbcType=VARCHAR},
+      </if>
       <if test="fllFamilyMemberNumber != null">
         fll_family_member_number = #{fllFamilyMemberNumber,jdbcType=INTEGER},
       </if>
@@ -218,6 +230,7 @@
   <update id="updateByPrimaryKey" parameterType="com.ruoyi.simc.domain.SimcFamilyLandLosing">
     update simc_family_land_losing
     set family_no = #{familyNo,jdbcType=VARCHAR},
+      head_resident_name = #{headResidentName,jdbcType=VARCHAR},
       fll_family_member_number = #{fllFamilyMemberNumber,jdbcType=INTEGER},
       fll_eligible_member_number = #{fllEligibleMemberNumber,jdbcType=INTEGER},
       original_agricultural_acreage = #{originalAgriculturalAcreage,jdbcType=DOUBLE},
@@ -244,5 +257,22 @@
     <if test="projectId != null">
       and project_id = #{projectId,jdbcType=INTEGER}
     </if>
+  </select>
+
+  <select id="selectList" parameterType="com.ruoyi.simc.domain.SimcFamilyLandLosing" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from simc_family_land_losing
+    <where>
+      <if test="familyNo != null and familyNo != ''">
+        AND family_no like concat('%', #{familyNo}, '%')
+      </if>
+      <if test="headResidentName != null and headResidentName != ''">
+        AND head_resident_name like concat('%', #{headResidentName}, '%')
+      </if>
+      <if test="projectName != null and projectName != ''">
+        AND project_name like concat('%', #{projectName}, '%')
+      </if>
+    </where>
   </select>
 </mapper>

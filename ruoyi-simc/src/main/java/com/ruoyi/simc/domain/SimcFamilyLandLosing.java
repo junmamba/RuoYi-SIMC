@@ -7,6 +7,8 @@ public class SimcFamilyLandLosing {
 
     private String familyNo;
 
+    private String headResidentName;
+
     private Integer fllFamilyMemberNumber;
 
     private Integer fllEligibleMemberNumber;
@@ -51,6 +53,14 @@ public class SimcFamilyLandLosing {
 
     public void setFamilyNo(String familyNo) {
         this.familyNo = familyNo == null ? null : familyNo.trim();
+    }
+
+    public String getHeadResidentName() {
+        return headResidentName;
+    }
+
+    public void setHeadResidentName(String headResidentName) {
+        this.headResidentName = headResidentName == null ? null : headResidentName.trim();
     }
 
     public Integer getFllFamilyMemberNumber() {

@@ -9,6 +9,8 @@ public class SimcFamily {
 
     private String familyHead;
 
+    private String familyHeadResidentName;
+
     private Long townshipDistrictId;
 
     private Long villageDistrictId;
@@ -47,6 +49,14 @@ public class SimcFamily {
 
     public void setFamilyHead(String familyHead) {
         this.familyHead = familyHead == null ? null : familyHead.trim();
+    }
+
+    public String getFamilyHeadResidentName() {
+        return familyHeadResidentName;
+    }
+
+    public void setFamilyHeadResidentName(String familyHeadResidentName) {
+        this.familyHeadResidentName = familyHeadResidentName == null ? null : familyHeadResidentName.trim();
     }
 
     public Long getTownshipDistrictId() {

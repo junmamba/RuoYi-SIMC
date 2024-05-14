@@ -392,10 +392,12 @@ public class SimcImportServiceImpl implements ISimcImportService {
 
             // 保存家庭信息
             SimcFamily simcFamily = this.simcFamilyMapper.selectByPrimaryKey(familyNO);
+            Map<String, String> familyHead = new HashMap<>();
             if (null != simcFamily) {
                 if (null != familyHeadImportRowData) {// 更新
                     simcFamily.setFamilyName("<" + familyHeadImportRowData.getResidentName() + "> 家");
                     simcFamily.setFamilyHead(familyNO);
+                    simcFamily.setFamilyHeadResidentName(familyHeadImportRowData.getResidentName());
                     simcFamily.setTownshipDistrictId(getDistrictId(townshipDistrictMap, familyHeadImportRowData.getResidentTownshipDistrictName()));
                     simcFamily.setVillageDistrictId(getDistrictId(villageDistrictMap, familyHeadImportRowData.getResidentTownshipDistrictName() + "_" + familyHeadImportRowData.getResidentVillageDistrictName()));
                     simcFamily.setGroupDistrictId(getDistrictId(groupDistrictMap, familyHeadImportRowData.getResidentTownshipDistrictName() + "_" + familyHeadImportRowData.getResidentVillageDistrictName() + "_" + familyHeadImportRowData.getResidentGroupDistrictName()));
@@ -405,6 +407,8 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 } else {// 家庭存在，但是导入的数据中有不存在户主的信息，则不操作
 
                 }
+
+                familyHead.put(familyNO, simcFamily.getFamilyHeadResidentName());
             } else {// 新增家庭
                 if (null == familyHeadImportRowData) {// 家庭不存在，但是导入的数据中有不存在户主的信息，则取第一行数据
                     familyHeadImportRowData = familySimcResidentSocialInsuranceImportRowDataList.get(0);
@@ -412,6 +416,7 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 simcFamily = new SimcFamily();
                 simcFamily.setFamilyNo(familyNO);
                 simcFamily.setFamilyName("<" + familyHeadImportRowData.getResidentName() + "> 家");
+                simcFamily.setFamilyHeadResidentName(familyHeadImportRowData.getResidentName());
                 simcFamily.setFamilyHead(familyNO);
                 simcFamily.setTownshipDistrictId(getDistrictId(townshipDistrictMap, familyHeadImportRowData.getResidentTownshipDistrictName()));
                 simcFamily.setVillageDistrictId(getDistrictId(villageDistrictMap, familyHeadImportRowData.getResidentTownshipDistrictName() + "_" + familyHeadImportRowData.getResidentVillageDistrictName()));
@@ -419,6 +424,7 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 simcFamily.setCreateUserId(createUserId);
                 simcFamily.setCreateTime(createTime);
                 this.simcFamilyMapper.insert(simcFamily);
+                familyHead.put(familyNO, familyHeadImportRowData.getResidentName());
             }
 
             // 保存家庭成员信息
@@ -459,6 +465,7 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 if (CollectionUtils.isEmpty(familyLandLosingList)) {// 新增
                     simcFamilyLandLosing = new SimcFamilyLandLosing();
                     simcFamilyLandLosing.setFamilyNo(familyNO);
+                    simcFamilyLandLosing.setHeadResidentName(familyHead.get(familyNO));
                     simcFamilyLandLosing.setFllFamilyMemberNumber(simcResidentSocialInsuranceImportRowData.getFllFamilyMemberNumber());
                     simcFamilyLandLosing.setFllEligibleMemberNumber(simcResidentSocialInsuranceImportRowData.getFllEligibleMemberNumber());
                     simcFamilyLandLosing.setOriginalAgriculturalAcreage(simcResidentSocialInsuranceImportRowData.getOriginalAgriculturalAcreage());

@@ -19,4 +19,7 @@ public interface SimcFamilyLandLosingMapper {
     int updateByPrimaryKey(SimcFamilyLandLosing record);
 
     List<SimcFamilyLandLosing> selectByFamilyNo(@Param("familyNo") String familyNo, @Param("projectId") Integer projectId);
+
+    List<SimcFamilyLandLosing> selectList(SimcFamilyLandLosing record);
+
 }
