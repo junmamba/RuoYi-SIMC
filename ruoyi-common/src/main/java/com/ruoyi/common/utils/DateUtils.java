@@ -1,6 +1,7 @@
 package com.ruoyi.common.utils;
 
 import java.lang.management.ManagementFactory;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -28,6 +30,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     public static String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
     public static String YYYYMMDD = "yyyyMMdd";
+    public static String YYYYMM = "yyyyMM";
 
 
     private static String[] parsePatterns = {
@@ -166,5 +169,20 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         LocalDateTime localDateTime = LocalDateTime.of(temporalAccessor, LocalTime.of(0, 0, 0));
         ZonedDateTime zdt = localDateTime.atZone(ZoneId.systemDefault());
         return Date.from(zdt.toInstant());
+    }
+
+    public static Timestamp getDateOfNextMonthFirstDay(Date date) {
+        if (null == date) {
+            return null;
+        }
+        Calendar rightNow = Calendar.getInstance();
+        rightNow.setTime(date);
+        rightNow.set(Calendar.DAY_OF_MONTH, 1);
+        rightNow.set(Calendar.HOUR_OF_DAY, 0);
+        rightNow.set(Calendar.MILLISECOND, 0);
+        rightNow.set(Calendar.SECOND, 0);
+        rightNow.set(Calendar.MINUTE, 0);
+        rightNow.set(Calendar.MONTH, rightNow.get(Calendar.MONTH) + 1);
+        return new Timestamp(rightNow.getTimeInMillis());
     }
 }

@@ -1,8 +1,10 @@
 package com.ruoyi.simc.domain;
 
+import com.ruoyi.common.core.domain.BaseEntity;
+
 import java.util.Date;
 
-public class SimcResidentOldLandLosing {
+public class SimcResidentOldLandLosing extends BaseEntity {
     private String residentIdCardNo;
 
     private String residentName;
@@ -41,8 +43,6 @@ public class SimcResidentOldLandLosing {
 
     private Date socialInsuranceTime;
 
-    private Date dieTime;
-
     private String returnFeeState;
 
     private Double returnFee;
@@ -58,6 +58,12 @@ public class SimcResidentOldLandLosing {
     private Long modifyUserId;
 
     private Date modifyTime;
+
+    private Long districtId;
+    private String districtName;
+    private String strPayTime;
+    private String strTheFirstReceiveTime;
+    private String strQuitTime;
 
     public String getResidentIdCardNo() {
         return residentIdCardNo;
@@ -211,14 +217,6 @@ public class SimcResidentOldLandLosing {
         this.socialInsuranceTime = socialInsuranceTime;
     }
 
-    public Date getDieTime() {
-        return dieTime;
-    }
-
-    public void setDieTime(Date dieTime) {
-        this.dieTime = dieTime;
-    }
-
     public String getReturnFeeState() {
         return returnFeeState;
     }
@@ -281,5 +279,45 @@ public class SimcResidentOldLandLosing {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public Long getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(Long districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public String getStrPayTime() {
+        return strPayTime;
+    }
+
+    public void setStrPayTime(String strPayTime) {
+        this.strPayTime = strPayTime;
+    }
+
+    public String getStrTheFirstReceiveTime() {
+        return strTheFirstReceiveTime;
+    }
+
+    public void setStrTheFirstReceiveTime(String strTheFirstReceiveTime) {
+        this.strTheFirstReceiveTime = strTheFirstReceiveTime;
+    }
+
+    public String getStrQuitTime() {
+        return strQuitTime;
+    }
+
+    public void setStrQuitTime(String strQuitTime) {
+        this.strQuitTime = strQuitTime;
     }
 }

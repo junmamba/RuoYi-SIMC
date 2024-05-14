@@ -2,6 +2,8 @@ package com.ruoyi.simc.mapper;
 
 import com.ruoyi.simc.domain.SimcResidentOldLandLosing;
 
+import java.util.List;
+
 public interface SimcResidentOldLandLosingMapper {
     int deleteByPrimaryKey(String residentIdCardNo);
 
@@ -14,4 +16,6 @@ public interface SimcResidentOldLandLosingMapper {
     int updateByPrimaryKeySelective(SimcResidentOldLandLosing record);
 
     int updateByPrimaryKey(SimcResidentOldLandLosing record);
+
+    List<SimcResidentOldLandLosing> selectList(SimcResidentOldLandLosing record);
 }

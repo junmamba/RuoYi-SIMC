@@ -121,21 +121,27 @@
       <el-table-column label="身份证号码" align="center" prop="residentIdCardNo"/>
       <el-table-column label="联系电话" align="center" prop="residentPhone"/>
       <el-table-column label="行政区域" align="center" prop="districtName"/>
-      <el-table-column label="缴费时间" align="center" prop="payTime"></el-table-column>
-      <el-table-column label="缴费档次" align="center" prop="payLevel"/>
-      <el-table-column label="缴费金额" align="center" prop="payMoney"></el-table-column>
+      <el-table-column label="缴费时间" align="center" prop="strPayTime" />
+      <el-table-column label="缴费档次" align="center" prop="payLevel">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.simc_pay_level" :value="scope.row.payLevel"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="缴费金额" align="center" prop="payMoney"/>
       <el-table-column label="开户行" align="center" prop="bank"/>
       <el-table-column label="银行卡号" align="center" prop="bankCode"/>
-      <el-table-column label="首次领取时间" align="center" prop="theFirstReceiveTime"/>
-      <el-table-column label="状态" align="center" prop="state"/>
-      <el-table-column label="退出时间" align="center" prop="quitTime"/>
-      <el-table-column label="参保情况" align="center" prop="socialInsuranceRemark"/>
-      <el-table-column label="参保时间" align="center" prop="socialInsuranceTime"/>
-      <el-table-column label="死亡时间" align="center" prop="dieTime"/>
-      <el-table-column label="退费状态" align="center" prop="returnFeeState"/>
-      <el-table-column label="退费金额" align="center" prop="returnFee"/>
-      <el-table-column label="退费时间" align="center" prop="returnFeeTime"/>
-      <el-table-column label="备注" align="center" prop="remark"/>
+      <el-table-column label="首次领取时间" align="center" prop="strTheFirstReceiveTime"/>
+      <el-table-column label="状态" align="center" prop="state">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.simc_resident_old_land_losing_state" :value="scope.row.state"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="退出时间" align="center" prop="strQuitTime"/>
+      <el-table-column label="退费状态" align="center" prop="returnFeeState">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.simc_return_fee_state" :value="scope.row.returnFeeState"/>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -175,7 +181,7 @@
 </template>
 
 <script>
-import {tableList} from "@/api/simc/rsis";
+import {tableList} from "@/api/simc/roll";
 import {listChaiSangDistrict} from "@/api/simc/district";
 import {getToken} from "@/utils/auth";
 
@@ -217,7 +223,7 @@ export default {
         // 设置上传的请求头部
         headers: {Authorization: "Bearer " + getToken()},
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + "/simc/rsis/importData"
+        url: process.env.VUE_APP_BASE_API + "/simc/roll/importData"
       },
       queryParams: {
         pageNum: 1,
@@ -275,7 +281,7 @@ export default {
     },
     /** 导入按钮操作 */
     handleFileImport() {
-      this.upload.title = "居民社保基本养老保险补贴信息导入";
+      this.upload.title = "老失地档案导入";
       this.upload.open = true;
     },
     // 文件上传中处理

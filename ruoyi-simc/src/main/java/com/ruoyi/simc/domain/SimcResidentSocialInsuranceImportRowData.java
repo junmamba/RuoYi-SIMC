@@ -11,9 +11,6 @@ import com.ruoyi.common.core.domain.ExcelRowData;
 public class SimcResidentSocialInsuranceImportRowData extends ExcelRowData {
     private static final long serialVersionUID = 1L;
 
-    @Excel(name = "序号", cellType = Excel.ColumnType.NUMERIC, prompt = "序号")
-    private Long no;
-
     @Excel(name = "姓名", cellType = Excel.ColumnType.STRING, prompt = "姓名")
     private String residentName;
 
@@ -70,14 +67,6 @@ public class SimcResidentSocialInsuranceImportRowData extends ExcelRowData {
 
     @Excel(name = "参保类别", cellType = Excel.ColumnType.STRING, prompt = "参保类别")
     private String socialInsuranceType;
-
-    public Long getNo() {
-        return no;
-    }
-
-    public void setNo(Long no) {
-        this.no = no;
-    }
 
     public String getResidentName() {
         return residentName;

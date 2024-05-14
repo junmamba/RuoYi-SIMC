@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 /**
- * 居民社保档案操作处理
+ * 居民社保补贴档案操作处理
  *
  * @author junmamba
  */
