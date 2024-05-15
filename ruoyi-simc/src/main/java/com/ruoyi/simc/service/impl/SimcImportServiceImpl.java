@@ -853,11 +853,11 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 addRowIndexFailInfo(rowFailInfos, rowIndex, "组为空");
             }
             combDistrict(importRowData.getResidentTownshipDistrictName(),
-                    importRowData.getResidentVillageDistrictName(),
-                    importRowData.getResidentGroupDistrictName(),
-                    townshipDistrictMap,
-                    villageDistrictMap,
-                    groupDistrictMap);
+                         importRowData.getResidentVillageDistrictName(),
+                         importRowData.getResidentGroupDistrictName(),
+                         townshipDistrictMap,
+                         villageDistrictMap,
+                         groupDistrictMap);
             if (StringUtils.isBlank(importRowData.getStrPayTime())) {
                 addRowIndexFailInfo(rowFailInfos, rowIndex, "缴费时间为空");
             } else {
@@ -905,11 +905,17 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 }
             }
             if ("正常".equals(importRowData.getStrState())) {
+                if (StringUtils.isNotBlank(importRowData.getStrQuitTime())) {
+                    addRowIndexFailInfo(rowFailInfos, rowIndex, "状态为：[" + importRowData.getStrState() + "]时，不需要填写[退出时间]列值");
+                }
                 if (StringUtils.isNotBlank(importRowData.getStrReturnFeeState())) {
                     addRowIndexFailInfo(rowFailInfos, rowIndex, "状态为：[" + importRowData.getStrState() + "]时，不需要填写[是否已退费]列值");
                 }
                 if (StringUtils.isNotBlank(importRowData.getStrReturnFeeTime())) {
                     addRowIndexFailInfo(rowFailInfos, rowIndex, "状态为：[" + importRowData.getStrState() + "]时，不需要填写[退费时间]列值");
+                }
+                if (null != importRowData.getReturnFee()) {
+                    addRowIndexFailInfo(rowFailInfos, rowIndex, "状态为：[" + importRowData.getStrState() + "]时，不需要填写[退费金额]列值");
                 }
             } else {
                 if (StringUtils.isBlank(importRowData.getStrReturnFeeState())) {
@@ -927,6 +933,16 @@ public class SimcImportServiceImpl implements ISimcImportService {
                         } catch (Exception e) {
                             addRowIndexFailInfo(rowFailInfos, rowIndex, "是否已退费为：[" + importRowData.getStrReturnFeeState() + "]时，需要填写[退费时间]列值，格式为：yyyyMMdd");
                         }
+                    }
+                    if (null != importRowData.getReturnFee() && importRowData.getReturnFee() < 0) {
+                        addRowIndexFailInfo(rowFailInfos, rowIndex, "[退费金额]不能为负数");
+                    }
+                } else {
+                    if (StringUtils.isNotBlank(importRowData.getStrReturnFeeTime())) {
+                        addRowIndexFailInfo(rowFailInfos, rowIndex, "是否已退费为：[" + importRowData.getStrReturnFeeState() + "]时，不需要填写[退费时间]列值");
+                    }
+                    if (null != importRowData.getReturnFee()) {
+                        addRowIndexFailInfo(rowFailInfos, rowIndex, "是否已退费为：[" + importRowData.getStrReturnFeeState() + "]时，不需要填写[退费金额]列值");
                     }
                 }
             }
@@ -973,10 +989,14 @@ public class SimcImportServiceImpl implements ISimcImportService {
             simcResidentOldLandLosing.setState(SimcUtil.convertResidentOldLandLosingState(importRowData.getStrState()));
             if (StringUtils.isNotBlank(importRowData.getStrQuitTime())) {
                 simcResidentOldLandLosing.setQuitTime(DateUtils.dateTime(DateUtils.YYYYMMDD, importRowData.getStrQuitTime()));
+            } else {
+                simcResidentOldLandLosing.setQuitTime(null);
             }
             simcResidentOldLandLosing.setSocialInsuranceRemark(importRowData.getSocialInsuranceRemark());
             if (StringUtils.isNotBlank(importRowData.getStrSocialInsuranceTime())) {
                 simcResidentOldLandLosing.setSocialInsuranceTime(DateUtils.dateTime(DateUtils.YYYYMMDD, importRowData.getStrSocialInsuranceTime() + "01"));
+            } else {
+                simcResidentOldLandLosing.setSocialInsuranceTime(null);
             }
 
             if ("是".equals(importRowData.getStrReturnFeeState())) {
@@ -987,14 +1007,19 @@ public class SimcImportServiceImpl implements ISimcImportService {
 
             if (StringUtils.isNotBlank(importRowData.getStrReturnFeeTime())) {
                 simcResidentOldLandLosing.setReturnFeeTime(DateUtils.dateTime(DateUtils.YYYYMMDD, importRowData.getStrReturnFeeTime()));
+            } else {
+                simcResidentOldLandLosing.setReturnFeeTime(null);
             }
 
             // 已退费，根据退出时间计算退费金额
-            if ("2".equals(simcResidentOldLandLosing.getReturnFeeState()) && simcResidentOldLandLosing.getQuitTime() != null) {
-                double returnFee = SimcUtil.calReturnFee(simcResidentOldLandLosing.getPayMoney(),
-                                                         simcResidentOldLandLosing.getTheFirstReceiveTime(),
-                                                         simcResidentOldLandLosing.getQuitTime(),
-                                                         simcResidentOldLandLosing.getPayLevel());
+            if ("2".equals(simcResidentOldLandLosing.getReturnFeeState())
+                    && simcResidentOldLandLosing.getQuitTime() != null) {
+                double returnFee = simcResidentOldLandLosing.getReturnFee() != null ?
+                                        simcResidentOldLandLosing.getReturnFee():
+                                        SimcUtil.calReturnFee(simcResidentOldLandLosing.getPayMoney(),
+                                                              simcResidentOldLandLosing.getTheFirstReceiveTime(),
+                                                              simcResidentOldLandLosing.getQuitTime(),
+                                                              simcResidentOldLandLosing.getPayLevel());
                 simcResidentOldLandLosing.setReturnFee(returnFee);
             }
             if (isCreate) {
