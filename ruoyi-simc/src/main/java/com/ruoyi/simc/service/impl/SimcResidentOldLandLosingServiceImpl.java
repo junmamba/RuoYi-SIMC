@@ -1,6 +1,7 @@
 package com.ruoyi.simc.service.impl;
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.simc.domain.SimcDistrict;
 import com.ruoyi.simc.domain.SimcResidentOldLandLosing;
 import com.ruoyi.simc.mapper.SimcResidentOldLandLosingMapper;
@@ -64,6 +65,9 @@ public class SimcResidentOldLandLosingServiceImpl implements ISimcResidentOldLan
             if (null != list.get(i).getQuitTime()) {
                 list.get(i).setStrQuitTime(DateUtils.parseDateToStr(DateUtils.YYYYMMDD, list.get(i).getQuitTime()));
             }
+            if (null != list.get(i).getReturnFeeTime()) {
+                list.get(i).setStrReturnFeeTime(DateUtils.parseDateToStr(DateUtils.YYYYMMDD, list.get(i).getReturnFeeTime()));
+            }
             double receivedTotalFee = 0;
             if (null != list.get(i).getQuitTime()) {
                 receivedTotalFee = SimcUtil.calReceivedTotalFee(list.get(i).getTheFirstReceiveTime(), list.get(i).getQuitTime(), SimcUtil.getTheFirstYearPerMonthReceiveMoney(list.get(i).getPayLevel()));
@@ -73,5 +77,121 @@ public class SimcResidentOldLandLosingServiceImpl implements ISimcResidentOldLan
             list.get(i).setReceivedTotalFee(receivedTotalFee);
         }
         return list;
+    }
+
+    @Override
+    public SimcResidentOldLandLosing selectByResidentIdCardNo(String residentIdCardNo) throws Exception {
+        if (StringUtils.isBlank(residentIdCardNo)) {
+            return null;
+        }
+        return this.simcResidentOldLandLosingMapper.selectByPrimaryKey(residentIdCardNo);
+    }
+
+    /**
+     * 操作居民老失地档案
+     *
+     * @param simcResidentOldLandLosing
+     * @return
+     * @throws Exception
+     */
+    public void oper(SimcResidentOldLandLosing simcResidentOldLandLosing) throws Exception {
+        if (StringUtils.isBlank(simcResidentOldLandLosing.getId())) {
+            throw new Exception("表单数据被篡改");
+        }
+        if (!simcResidentOldLandLosing.getId().equals(simcResidentOldLandLosing.getResidentIdCardNo())) {
+            // 说明修改了身份证号码
+            SimcResidentOldLandLosing residentOldLandLosing = this.simcResidentOldLandLosingMapper.selectByPrimaryKey(simcResidentOldLandLosing.getResidentIdCardNo());
+            if (null != residentOldLandLosing) {
+                throw new Exception("身份证号码：" + simcResidentOldLandLosing.getResidentIdCardNo() + "已经存在其他老失地档案数据");
+            }
+        }
+        if (StringUtils.isBlank(simcResidentOldLandLosing.getResidentIdCardNo())) {
+            throw new Exception("身份证号码不能为空");
+        }
+        if (simcResidentOldLandLosing.getResidentIdCardNo().length() != 18) {
+            throw new Exception("身份证号码必须是18位");
+        }
+        if (StringUtils.isBlank(simcResidentOldLandLosing.getResidentName())) {
+            throw new Exception("身份证号码为空");
+        }
+        String sex = simcResidentOldLandLosing.getResidentIdCardNo().substring(16, 17);
+        if (!("1".equals(sex) || "2".equals(sex))) {
+            throw new Exception("身份证号码第17位填写错误");
+        }
+        if (!("1".equals(simcResidentOldLandLosing.getPayLevel()) || "2".equals(simcResidentOldLandLosing.getPayLevel()) || "3".equals(simcResidentOldLandLosing.getPayLevel()))) {
+            throw new Exception("请选择正确的缴费档次");
+        }
+        if (null == simcResidentOldLandLosing.getPayTime()) {
+            throw new Exception("请输入缴费时间");
+        }
+        if (null == simcResidentOldLandLosing.getPayMoney() || simcResidentOldLandLosing.getPayMoney() <= 0) {
+            throw new Exception("请输入缴费金额");
+        }
+
+        if ("1".equals(simcResidentOldLandLosing.getState())) {// 正常状态
+            if (null != simcResidentOldLandLosing.getQuitTime()) {
+                throw new Exception("正常状态不允许选择退出时间");
+            }
+            if (!"1".equals(simcResidentOldLandLosing.getReturnFeeState())) {
+                throw new Exception("正常状态时，退费状态必须为未退费");
+            }
+            if (null != simcResidentOldLandLosing.getReturnFeeTime()) {
+                throw new Exception("正常状态不允许选择退费时间");
+            }
+            if (null != simcResidentOldLandLosing.getReturnFee()) {
+                throw new Exception("正常状态不允许输入退费金额");
+            }
+        } else {// 退出状态
+            if (null == simcResidentOldLandLosing.getQuitTime()) {
+                throw new Exception("请选择退出时间");
+            }
+            if ("1".equals(simcResidentOldLandLosing.getReturnFeeState())) {// 未退费状态
+                if (null != simcResidentOldLandLosing.getReturnFeeTime()) {
+                    throw new Exception("未退费状态不允许选择退费时间");
+                }
+                if (null != simcResidentOldLandLosing.getReturnFee() && simcResidentOldLandLosing.getReturnFee() > 0) {
+                    throw new Exception("未退费状态不允许输入退费金额");
+                }
+            } else if ("2".equals(simcResidentOldLandLosing.getReturnFeeState())) {// 已退费状态
+                if (null == simcResidentOldLandLosing.getReturnFeeTime()) {
+                    throw new Exception("已退费状态请选择退费时间");
+                }
+            }
+            if (null != simcResidentOldLandLosing.getReturnFee() && simcResidentOldLandLosing.getReturnFee() < 0) {
+                throw new Exception("退费金额必须不能小于0");
+            }
+        }
+
+        simcResidentOldLandLosing.setResidentSex(Integer.parseInt(sex));
+
+        // 生日
+        simcResidentOldLandLosing.setResidentBirthDate(SimcUtil.getBirthDateFromIdCardNo(simcResidentOldLandLosing.getResidentIdCardNo()));
+        // 首次领取时间
+        simcResidentOldLandLosing.setTheFirstReceiveTime(SimcUtil.calTheFirstReceiveTime(simcResidentOldLandLosing.getResidentBirthDate(), simcResidentOldLandLosing.getResidentSex()));// 生日的下个月
+        // 首月领取金额
+        simcResidentOldLandLosing.setTheFirstYearPerMonthReceiveMoney(SimcUtil.getTheFirstYearPerMonthReceiveMoney(simcResidentOldLandLosing.getPayLevel()));
+        if ("2".equals(simcResidentOldLandLosing.getReturnFeeState())//
+                && null != simcResidentOldLandLosing.getQuitTime()
+                && (null == simcResidentOldLandLosing.getReturnFee() || simcResidentOldLandLosing.getReturnFee() <= 0)) {
+            double returnFee = SimcUtil.calReturnFee(simcResidentOldLandLosing.getPayMoney(),
+                    simcResidentOldLandLosing.getTheFirstReceiveTime(),
+                    simcResidentOldLandLosing.getQuitTime(),
+                    simcResidentOldLandLosing.getPayLevel());
+            simcResidentOldLandLosing.setReturnFee(returnFee);
+        }
+        this.simcResidentOldLandLosingMapper.updateById(simcResidentOldLandLosing);
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param residentIdCardNos
+     * @return 结果
+     */
+    public int delete(String[] residentIdCardNos) {
+        for (int i = 0; null != residentIdCardNos && i < residentIdCardNos.length; i++) {
+            this.simcResidentOldLandLosingMapper.deleteByPrimaryKey(residentIdCardNos[i]);
+        }
+        return 1;
     }
 }

@@ -822,13 +822,13 @@ public class SimcImportServiceImpl implements ISimcImportService {
             Integer rowIndex = importRowData.getRowIndex();
             String residentIdCardNo = importRowData.getResidentIdCardNo();
             if (StringUtils.isBlank(importRowData.getResidentName())) {
-                addRowIndexFailInfo(rowFailInfos, rowIndex, "姓名为空");
+                addRowIndexFailInfo(rowFailInfos, rowIndex, "姓名不能为空");
             }
             if (StringUtils.isBlank(residentIdCardNo)) {
-                addRowIndexFailInfo(rowFailInfos, rowIndex, "身份证号码为空");
+                addRowIndexFailInfo(rowFailInfos, rowIndex, "身份证号码不为空");
             } else {
                 if (residentIdCardNo.length() != 18) {
-                    addRowIndexFailInfo(rowFailInfos, rowIndex, "身份证号码不是18位身份证");
+                    addRowIndexFailInfo(rowFailInfos, rowIndex, "身份证号码必须是18位");
                 } else {
                     String sex = residentIdCardNo.substring(16, 17);
                     if (!("1".equals(sex) || "2".equals(sex))) {

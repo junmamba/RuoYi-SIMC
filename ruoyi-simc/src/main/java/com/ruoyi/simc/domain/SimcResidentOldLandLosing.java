@@ -59,12 +59,22 @@ public class SimcResidentOldLandLosing extends BaseEntity {
 
     private Date modifyTime;
 
+    private String id;
     private Long districtId;
     private String districtName;
     private String strPayTime;
     private String strTheFirstReceiveTime;
     private String strQuitTime;
+    private String strReturnFeeTime;
     private Double receivedTotalFee;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getResidentIdCardNo() {
         return residentIdCardNo;
@@ -320,6 +330,14 @@ public class SimcResidentOldLandLosing extends BaseEntity {
 
     public void setStrQuitTime(String strQuitTime) {
         this.strQuitTime = strQuitTime;
+    }
+
+    public String getStrReturnFeeTime() {
+        return strReturnFeeTime;
+    }
+
+    public void setStrReturnFeeTime(String strReturnFeeTime) {
+        this.strReturnFeeTime = strReturnFeeTime;
     }
 
     public Double getReceivedTotalFee() {

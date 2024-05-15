@@ -398,4 +398,36 @@
     </where>
     order by resident_township_district_id, resident_village_district_id, resident_group_district_id  desc
   </select>
+
+  <update id="updateById" parameterType="com.ruoyi.simc.domain.SimcResidentOldLandLosing">
+    update simc_resident_old_land_losing
+    set resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR},
+        resident_name = #{residentName,jdbcType=VARCHAR},
+        resident_sex = #{residentSex,jdbcType=INTEGER},
+        resident_birth_date = #{residentBirthDate,jdbcType=TIMESTAMP},
+        resident_phone = #{residentPhone,jdbcType=VARCHAR},
+        resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
+        resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},
+        resident_group_district_id = #{residentGroupDistrictId,jdbcType=BIGINT},
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+        pay_level = #{payLevel,jdbcType=VARCHAR},
+        pay_money = #{payMoney,jdbcType=DOUBLE},
+        bank = #{bank,jdbcType=VARCHAR},
+        bank_code = #{bankCode,jdbcType=VARCHAR},
+        the_first_receive_time = #{theFirstReceiveTime,jdbcType=TIMESTAMP},
+        the_first_year_per_month_receive_money = #{theFirstYearPerMonthReceiveMoney,jdbcType=DOUBLE},
+        state = #{state,jdbcType=VARCHAR},
+        quit_time = #{quitTime,jdbcType=TIMESTAMP},
+        social_insurance_remark = #{socialInsuranceRemark,jdbcType=VARCHAR},
+        social_insurance_time = #{socialInsuranceTime,jdbcType=TIMESTAMP},
+        return_fee_state = #{returnFeeState,jdbcType=VARCHAR},
+        return_fee = #{returnFee,jdbcType=DOUBLE},
+        return_fee_time = #{returnFeeTime,jdbcType=TIMESTAMP},
+        remark = #{remark,jdbcType=VARCHAR},
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where resident_id_card_no = #{id,jdbcType=VARCHAR}
+  </update>
 </mapper>

@@ -10,11 +10,11 @@ import com.ruoyi.simc.domain.SimcResidentOldLandLosing;
 import com.ruoyi.simc.domain.SimcResidentOldLandLosingImportRowData;
 import com.ruoyi.simc.service.ISimcImportService;
 import com.ruoyi.simc.service.ISimcResidentOldLandLosingService;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -43,12 +43,41 @@ public class RollController extends BaseController {
         return getDataTable(list);
     }
 
-    @Log(title = "居民老失地档案管理管理", businessType = BusinessType.IMPORT)
+    @Log(title = "居民老失地档案管理", businessType = BusinessType.IMPORT)
     @PostMapping("/importData")
     public AjaxResult importData(MultipartFile file) throws Exception {
         ExcelUtil<SimcResidentOldLandLosingImportRowData> util = new ExcelUtil<SimcResidentOldLandLosingImportRowData>(SimcResidentOldLandLosingImportRowData.class);
         List<SimcResidentOldLandLosingImportRowData> rowDataList = util.importExcel(file.getInputStream(), 1);
         String message = this.simcImportService.importSimcResidentOldLandLosingDataDataList(rowDataList, getUserId());
         return success(message);
+    }
+
+    /**
+     * 根据用户编号获取详细信息
+     */
+    @GetMapping(value = {"/{residentIdCardNo}"})
+    public AjaxResult getInfo(@PathVariable(value = "residentIdCardNo", required = true) String residentIdCardNo) throws Exception {
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put(AjaxResult.DATA_TAG, this.simcResidentOldLandLosingService.selectByResidentIdCardNo(residentIdCardNo));
+        return ajax;
+    }
+
+    /**
+     * 操作
+     */
+    @Log(title = "居民老失地档案管理", businessType = BusinessType.UPDATE)
+    @PostMapping("/oper")
+    public AjaxResult oper(@Validated @RequestBody SimcResidentOldLandLosing residentOldLandLosing) throws Exception {
+        this.simcResidentOldLandLosingService.oper(residentOldLandLosing);
+        return toAjax(1);
+    }
+
+    /**
+     * 删除用户
+     */
+    @Log(title = "居民老失地档案管理", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{residentIdCardNos}")
+    public AjaxResult remove(@PathVariable String[] residentIdCardNos) {
+        return toAjax(simcResidentOldLandLosingService.delete(residentIdCardNos));
     }
 }

@@ -1,6 +1,7 @@
 package com.ruoyi.simc.mapper;
 
 import com.ruoyi.simc.domain.SimcResidentOldLandLosing;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface SimcResidentOldLandLosingMapper {
     int updateByPrimaryKey(SimcResidentOldLandLosing record);
 
     List<SimcResidentOldLandLosing> selectList(SimcResidentOldLandLosing record);
+
+    int updateById(SimcResidentOldLandLosing record);
 }

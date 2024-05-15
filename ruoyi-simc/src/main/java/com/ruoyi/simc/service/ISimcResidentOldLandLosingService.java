@@ -17,4 +17,30 @@ public interface ISimcResidentOldLandLosingService {
      * @return 居民老失地档案列表
      */
     public List<SimcResidentOldLandLosing> selectList(SimcResidentOldLandLosing roll) throws Exception;
+
+    /**
+     * 查询居民老失地档案
+     *
+     * @param residentIdCardNo
+     * @return
+     * @throws Exception
+     */
+    public SimcResidentOldLandLosing selectByResidentIdCardNo(String residentIdCardNo) throws Exception;
+
+    /**
+     * 操作居民老失地档案
+     *
+     * @param simcResidentOldLandLosing
+     * @return
+     * @throws Exception
+     */
+    public void oper(SimcResidentOldLandLosing simcResidentOldLandLosing) throws Exception;
+
+    /**
+     * 批量删除
+     *
+     * @param residentIdCardNos
+     * @return 结果
+     */
+    public int delete(String[] residentIdCardNos);
 }
