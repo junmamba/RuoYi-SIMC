@@ -121,6 +121,11 @@
       <el-table-column label="身份证号码" align="center" prop="residentIdCardNo"/>
       <el-table-column label="联系电话" align="center" prop="residentPhone"/>
       <el-table-column label="行政区域" align="center" prop="districtName"/>
+      <el-table-column label="状态" align="center" prop="state">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.simc_resident_old_land_losing_state" :value="scope.row.state"/>
+        </template>
+      </el-table-column>
       <el-table-column label="缴费时间" align="center" prop="strPayTime" />
       <el-table-column label="缴费档次" align="center" prop="payLevel">
         <template slot-scope="scope">
@@ -128,20 +133,17 @@
         </template>
       </el-table-column>
       <el-table-column label="缴费金额" align="center" prop="payMoney"/>
-      <el-table-column label="开户行" align="center" prop="bank"/>
-      <el-table-column label="银行卡号" align="center" prop="bankCode"/>
       <el-table-column label="首次领取时间" align="center" prop="strTheFirstReceiveTime"/>
-      <el-table-column label="状态" align="center" prop="state">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.simc_resident_old_land_losing_state" :value="scope.row.state"/>
-        </template>
-      </el-table-column>
+      <el-table-column label="已领取金额" align="center" prop="receivedTotalFee"/>
       <el-table-column label="退出时间" align="center" prop="strQuitTime"/>
       <el-table-column label="退费状态" align="center" prop="returnFeeState">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.simc_return_fee_state" :value="scope.row.returnFeeState"/>
         </template>
       </el-table-column>
+      <el-table-column label="退费金额" align="center" prop="returnFee"/>
+      <el-table-column label="开户行" align="center" prop="bank"/>
+      <el-table-column label="银行卡号" align="center" prop="bankCode"/>
     </el-table>
 
     <pagination

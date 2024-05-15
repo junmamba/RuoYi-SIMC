@@ -185,4 +185,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         rightNow.set(Calendar.MONTH, rightNow.get(Calendar.MONTH) + 1);
         return new Timestamp(rightNow.getTimeInMillis());
     }
+
+    public static int getDateOfMonth(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.MONTH) + 1;
+    }
 }

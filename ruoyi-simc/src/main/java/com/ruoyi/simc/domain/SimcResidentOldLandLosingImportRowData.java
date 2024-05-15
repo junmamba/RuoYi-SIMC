@@ -54,14 +54,11 @@ public class SimcResidentOldLandLosingImportRowData extends ExcelRowData {
     @Excel(name = "参保时间", cellType = Excel.ColumnType.STRING, prompt = "参保时间")
     private String strSocialInsuranceTime;
 
-    @Excel(name = "是否退费", cellType = Excel.ColumnType.STRING, prompt = "是否退费")
+    @Excel(name = "是否已退费", cellType = Excel.ColumnType.STRING, prompt = "是否已退费")
     private String strReturnFeeState;
 
     @Excel(name = "退费时间", cellType = Excel.ColumnType.STRING, prompt = "退费时间")
     private String strReturnFeeTime;
-
-    @Excel(name = "退费金额", cellType = Excel.ColumnType.NUMERIC, prompt = "退费金额")
-    private Double returnFee;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -209,13 +206,5 @@ public class SimcResidentOldLandLosingImportRowData extends ExcelRowData {
 
     public void setStrReturnFeeTime(String strReturnFeeTime) {
         this.strReturnFeeTime = strReturnFeeTime;
-    }
-
-    public Double getReturnFee() {
-        return returnFee;
-    }
-
-    public void setReturnFee(Double returnFee) {
-        this.returnFee = returnFee;
     }
 }

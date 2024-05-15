@@ -5,6 +5,7 @@ import com.ruoyi.simc.domain.*;
 import com.ruoyi.simc.mapper.*;
 import com.ruoyi.simc.service.ISimcDistrictService;
 import com.ruoyi.simc.service.ISimcImportService;
+import com.ruoyi.simc.util.SimcUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -113,8 +114,8 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 simcResident = new SimcResident();
                 simcResident.setIdCardNo(residentIdCardNo);
                 simcResident.setName(importRowData.getResidentName());
-                simcResident.setSex(convertSex(importRowData.getResidentSex()));
-                simcResident.setBirthDate(getBirthDateFromIdCardNo(residentIdCardNo));
+                simcResident.setSex(SimcUtil.convertSex(importRowData.getResidentSex()));
+                simcResident.setBirthDate(SimcUtil.getBirthDateFromIdCardNo(residentIdCardNo));
                 simcResident.setPhone(importRowData.getResidentPhone());
                 simcResident.setResideType("1");
                 simcResident.setTownshipDistrictId(getDistrictId(townshipDistrictMap, importRowData.getResidentTownshipDistrictName()));
@@ -134,8 +135,8 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 simcResidentSocialInsurance = new SimcResidentSocialInsurance();
                 simcResidentSocialInsurance.setResidentIdCardNo(residentIdCardNo);
                 simcResidentSocialInsurance.setResidentName(importRowData.getResidentName());
-                simcResidentSocialInsurance.setResidentSex(convertSex(importRowData.getResidentSex()));
-                simcResidentSocialInsurance.setResidentBirthDate(getBirthDateFromIdCardNo(residentIdCardNo));
+                simcResidentSocialInsurance.setResidentSex(SimcUtil.convertSex(importRowData.getResidentSex()));
+                simcResidentSocialInsurance.setResidentBirthDate(SimcUtil.getBirthDateFromIdCardNo(residentIdCardNo));
                 simcResidentSocialInsurance.setResidentPhone(importRowData.getResidentPhone());
                 simcResidentSocialInsurance.setResidentTownshipDistrictId(getDistrictId(townshipDistrictMap, importRowData.getResidentTownshipDistrictName()));
                 simcResidentSocialInsurance.setResidentVillageDistrictId(getDistrictId(villageDistrictMap, importRowData.getResidentTownshipDistrictName() + "_" + importRowData.getResidentVillageDistrictName()));
@@ -143,8 +144,8 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 simcResidentSocialInsurance.setFllId((familyLandLosing.get(importRowData.getHeadResidentIdCardNo() + "_" + importRowData.getFllProjectName())));
                 simcResidentSocialInsurance.setFllProjectName(importRowData.getFllProjectName());
                 simcResidentSocialInsurance.setFllTime(importRowData.getFllTime());
-                simcResidentSocialInsurance.setFllProjectIsCityLevel(convertProjectIsCityLevel(importRowData.getFllProjectIsCityLevel()));
-                simcResidentSocialInsurance.setSocialInsuranceType(convertSocialInsuranceType(importRowData.getSocialInsuranceType()));
+                simcResidentSocialInsurance.setFllProjectIsCityLevel(SimcUtil.convertProjectIsCityLevel(importRowData.getFllProjectIsCityLevel()));
+                simcResidentSocialInsurance.setSocialInsuranceType(SimcUtil.convertSocialInsuranceType(importRowData.getSocialInsuranceType()));
                 simcResidentSocialInsurance.setSocialInsuranceState("1");
                 simcResidentSocialInsurance.setSocialInsuranceJointApprovalTime(DateUtils.parseDate(importRowData.getSocialInsuranceJointApprovalTime(), DateUtils.YYYYMMDD));
                 simcResidentSocialInsurance.setCreateUserId(userId);
@@ -299,7 +300,7 @@ public class SimcImportServiceImpl implements ISimcImportService {
             if (null == laProjectData) {
                 laProjectData = new HashMap<String, Object>();
                 laProjectData.put("ProjectName", importRowData.getFllProjectName());
-                laProjectData.put("IsCityLevel", convertProjectIsCityLevel(importRowData.getFllProjectIsCityLevel()));
+                laProjectData.put("IsCityLevel", SimcUtil.convertProjectIsCityLevel(importRowData.getFllProjectIsCityLevel()));
                 laProjectImportData.put(importRowData.getFllProjectName(), laProjectData);
             }
             // @part 2: 梳理行政区域数据
@@ -729,7 +730,7 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 this.simcResidentSocialInsuranceSubsidyMapper.insert(subsidy);
             }
         }
-        return "温馨提示</br>成功了";
+        return "温馨提示</br>导入成功";
     }
 
     private boolean isSubsidy(String residentIdCardNo, Date subsidyTime) {
@@ -798,35 +799,6 @@ public class SimcImportServiceImpl implements ISimcImportService {
             rowFailInfos.put(rowIndex, failInfos);
         }
         failInfos.add(failInfo);
-    }
-
-    private Date getBirthDateFromIdCardNo(String idCardNo) throws Exception {
-        return DateUtils.addHours(DateUtils.parseDate(idCardNo.substring(6, 14), DateUtils.YYYYMMDD), 1);
-    }
-
-    private String convertSocialInsuranceType(String socialInsuranceType) {
-        if ("城镇职工".equals(socialInsuranceType)) {
-            return "1";
-        } else
-            return "2";
-    }
-
-    private int convertProjectIsCityLevel(String projectIsCityLevel) {
-        if ("是".equals(projectIsCityLevel)) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
-    private int convertSex(String sex) {
-        if ("男".equals(sex)) {
-            return 1;
-        } else if ("女".equals(sex)) {
-            return 2;
-        } else {
-            return 0;
-        }
     }
 
     /**
@@ -934,33 +906,27 @@ public class SimcImportServiceImpl implements ISimcImportService {
             }
             if ("正常".equals(importRowData.getStrState())) {
                 if (StringUtils.isNotBlank(importRowData.getStrReturnFeeState())) {
-                    addRowIndexFailInfo(rowFailInfos, rowIndex, "状态为：[" + importRowData.getStrState() + "]时，不需要填写[是否退费]列值");
+                    addRowIndexFailInfo(rowFailInfos, rowIndex, "状态为：[" + importRowData.getStrState() + "]时，不需要填写[是否已退费]列值");
                 }
                 if (StringUtils.isNotBlank(importRowData.getStrReturnFeeTime())) {
                     addRowIndexFailInfo(rowFailInfos, rowIndex, "状态为：[" + importRowData.getStrState() + "]时，不需要填写[退费时间]列值");
-                }
-                if (null != importRowData.getReturnFee()) {
-                    addRowIndexFailInfo(rowFailInfos, rowIndex, "状态为：[" + importRowData.getStrState() + "]时，不需要填写[退费金额]列值");
                 }
             } else {
                 if (StringUtils.isBlank(importRowData.getStrReturnFeeState())) {
                     importRowData.setStrReturnFeeState("否");
                 }
                 if (!("是".equals(importRowData.getStrReturnFeeState()) || "否".equals(importRowData.getStrReturnFeeState()))) {
-                    addRowIndexFailInfo(rowFailInfos, rowIndex, "是否退费取值范围：是、否");
+                    addRowIndexFailInfo(rowFailInfos, rowIndex, "是否已退费取值范围：是、否");
                 }
                 if ("是".equals(importRowData.getStrReturnFeeState())) {
                     if (StringUtils.isBlank(importRowData.getStrReturnFeeTime())) {
-                        addRowIndexFailInfo(rowFailInfos, rowIndex, "是否退费为：[" + importRowData.getStrReturnFeeState() + "]时，需要填写[退费时间]列值，格式为：yyyyMMdd");
+                        addRowIndexFailInfo(rowFailInfos, rowIndex, "是否已退费为：[" + importRowData.getStrReturnFeeState() + "]时，需要填写[退费时间]列值，格式为：yyyyMMdd");
                     } else {
                         try {
                             DateUtils.dateTime(DateUtils.YYYYMMDD, importRowData.getStrReturnFeeTime());
                         } catch (Exception e) {
-                            addRowIndexFailInfo(rowFailInfos, rowIndex, "是否退费为：[" + importRowData.getStrReturnFeeState() + "]时，需要填写[退费时间]列值，格式为：yyyyMMdd");
+                            addRowIndexFailInfo(rowFailInfos, rowIndex, "是否已退费为：[" + importRowData.getStrReturnFeeState() + "]时，需要填写[退费时间]列值，格式为：yyyyMMdd");
                         }
-                    }
-                    if (null == importRowData.getReturnFee() || importRowData.getReturnFee() < 0) {
-                        addRowIndexFailInfo(rowFailInfos, rowIndex, "是否退费为：[" + importRowData.getStrReturnFeeState() + "]时，需要填写[退费金额]列值");
                     }
                 }
             }
@@ -991,20 +957,20 @@ public class SimcImportServiceImpl implements ISimcImportService {
             }
             simcResidentOldLandLosing.setResidentIdCardNo(importRowData.getResidentIdCardNo());
             simcResidentOldLandLosing.setResidentName(importRowData.getResidentName());
-            simcResidentOldLandLosing.setResidentSex(convertSex(importRowData.getResidentSex()));
-            simcResidentOldLandLosing.setResidentBirthDate(getBirthDateFromIdCardNo(importRowData.getResidentIdCardNo()));
+            simcResidentOldLandLosing.setResidentSex(SimcUtil.convertSex(importRowData.getResidentSex()));
+            simcResidentOldLandLosing.setResidentBirthDate(SimcUtil.getBirthDateFromIdCardNo(importRowData.getResidentIdCardNo()));
             simcResidentOldLandLosing.setResidentPhone(importRowData.getResidentPhone());
             simcResidentOldLandLosing.setResidentTownshipDistrictId(getDistrictId(townshipDistrictMap, importRowData.getResidentTownshipDistrictName()));
             simcResidentOldLandLosing.setResidentVillageDistrictId(getDistrictId(villageDistrictMap, importRowData.getResidentTownshipDistrictName() + "_" + importRowData.getResidentVillageDistrictName()));
             simcResidentOldLandLosing.setResidentGroupDistrictId(getDistrictId(groupDistrictMap, importRowData.getResidentTownshipDistrictName() + "_" + importRowData.getResidentVillageDistrictName() + "_" + importRowData.getResidentGroupDistrictName()));
             simcResidentOldLandLosing.setPayTime(DateUtils.dateTime(DateUtils.YYYYMMDD, importRowData.getStrPayTime() + "01"));
-            simcResidentOldLandLosing.setPayLevel(convertPayLevel(importRowData.getStrPayLevel()));
+            simcResidentOldLandLosing.setPayLevel(SimcUtil.convertPayLevel(importRowData.getStrPayLevel()));
             simcResidentOldLandLosing.setPayMoney(importRowData.getPayMoney());
             simcResidentOldLandLosing.setBank(importRowData.getBank());
             simcResidentOldLandLosing.setBankCode(importRowData.getBankCode());
-            simcResidentOldLandLosing.setTheFirstReceiveTime(DateUtils.getDateOfNextMonthFirstDay(simcResidentOldLandLosing.getResidentBirthDate()));// 生日的下个月
-            simcResidentOldLandLosing.setTheFirstYearPerMonthReceiveMoney(getTheFirstYearPerMonthReceiveMoney(simcResidentOldLandLosing.getPayLevel()));
-            simcResidentOldLandLosing.setState(convertResidentOldLandLosingState(importRowData.getStrState()));
+            simcResidentOldLandLosing.setTheFirstReceiveTime(SimcUtil.calTheFirstReceiveTime(simcResidentOldLandLosing.getResidentBirthDate(), simcResidentOldLandLosing.getResidentSex()));// 生日的下个月
+            simcResidentOldLandLosing.setTheFirstYearPerMonthReceiveMoney(SimcUtil.getTheFirstYearPerMonthReceiveMoney(simcResidentOldLandLosing.getPayLevel()));
+            simcResidentOldLandLosing.setState(SimcUtil.convertResidentOldLandLosingState(importRowData.getStrState()));
             if (StringUtils.isNotBlank(importRowData.getStrQuitTime())) {
                 simcResidentOldLandLosing.setQuitTime(DateUtils.dateTime(DateUtils.YYYYMMDD, importRowData.getStrQuitTime()));
             }
@@ -1023,8 +989,14 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 simcResidentOldLandLosing.setReturnFeeTime(DateUtils.dateTime(DateUtils.YYYYMMDD, importRowData.getStrReturnFeeTime()));
             }
 
-            simcResidentOldLandLosing.setReturnFee(importRowData.getReturnFee());
-
+            // 已退费，根据退出时间计算退费金额
+            if ("2".equals(simcResidentOldLandLosing.getReturnFeeState()) && simcResidentOldLandLosing.getQuitTime() != null) {
+                double returnFee = SimcUtil.calReturnFee(simcResidentOldLandLosing.getPayMoney(),
+                                                         simcResidentOldLandLosing.getTheFirstReceiveTime(),
+                                                         simcResidentOldLandLosing.getQuitTime(),
+                                                         simcResidentOldLandLosing.getPayLevel());
+                simcResidentOldLandLosing.setReturnFee(returnFee);
+            }
             if (isCreate) {
                 simcResidentOldLandLosing.setCreateUserId(userId);
                 simcResidentOldLandLosing.setCreateTime(currentDate);
@@ -1035,46 +1007,6 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 this.simcResidentOldLandLosingMapper.updateByPrimaryKey(simcResidentOldLandLosing);
             }
         }
-        return "温馨提示</br>成功了";
-    }
-
-    private double getTheFirstYearPerMonthReceiveMoney(String payLevel) throws Exception {
-        if ("1".equals(payLevel)) {
-            return 150;
-        } else if ("2".equals(payLevel)) {
-            return 160;
-        } else if ("3".equals(payLevel)) {
-            return 180;
-        } else {
-            throw new Exception("缴费档次值非法");
-        }
-    }
-
-    private String convertResidentOldLandLosingState(String residentOldLandLosingState) throws Exception {
-        if ("正常".equals(residentOldLandLosingState)) {
-            return "1";
-        } else if ("改办新失地".equals(residentOldLandLosingState)) {
-            return "2";
-        } else if ("划转其他区".equals(residentOldLandLosingState)) {
-            return "3";
-        } else if ("退出".equals(residentOldLandLosingState)) {
-            return "4";
-        } else if ("死亡".equals(residentOldLandLosingState)) {
-            return "5";
-        } else {
-            throw new Exception("状态值非法");
-        }
-    }
-
-    private String convertPayLevel(String strPayLevel) throws Exception {
-        if ("一档".equals(strPayLevel)) {
-            return "1";
-        } else if ("二档".equals(strPayLevel)) {
-            return "2";
-        } else if ("三档".equals(strPayLevel)) {
-            return "3";
-        } else {
-            throw new Exception("缴费档次值非法");
-        }
+        return "温馨提示</br>导入成功";
     }
 }

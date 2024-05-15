@@ -6,6 +6,7 @@ import com.ruoyi.simc.domain.SimcResidentOldLandLosing;
 import com.ruoyi.simc.mapper.SimcResidentOldLandLosingMapper;
 import com.ruoyi.simc.service.ISimcDistrictService;
 import com.ruoyi.simc.service.ISimcResidentOldLandLosingService;
+import com.ruoyi.simc.util.SimcUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +51,7 @@ public class SimcResidentOldLandLosingServiceImpl implements ISimcResidentOldLan
             districtIds.add(list.get(i).getResidentVillageDistrictId());
             districtIds.add(list.get(i).getResidentGroupDistrictId());
         }
+        Date now = DateUtils.getNowDate();
         List<SimcDistrict> simcDistrictList = this.simcDistrictService.queryByDistrictIdList(new ArrayList<>(districtIds));
         for (int i = 0; null != list && i < list.size(); i++) {
             list.get(i).setDistrictName(simcDistrictService.getDistrictName(list.get(i).getResidentTownshipDistrictId(), list.get(i).getResidentVillageDistrictId(), list.get(i).getResidentGroupDistrictId(), simcDistrictList));
@@ -62,6 +64,13 @@ public class SimcResidentOldLandLosingServiceImpl implements ISimcResidentOldLan
             if (null != list.get(i).getQuitTime()) {
                 list.get(i).setStrQuitTime(DateUtils.parseDateToStr(DateUtils.YYYYMMDD, list.get(i).getQuitTime()));
             }
+            double receivedTotalFee = 0;
+            if (null != list.get(i).getQuitTime()) {
+                receivedTotalFee = SimcUtil.calReceivedTotalFee(list.get(i).getTheFirstReceiveTime(), list.get(i).getQuitTime(), SimcUtil.getTheFirstYearPerMonthReceiveMoney(list.get(i).getPayLevel()));
+            } else {
+                receivedTotalFee = SimcUtil.calReceivedTotalFee(list.get(i).getTheFirstReceiveTime(), now, SimcUtil.getTheFirstYearPerMonthReceiveMoney(list.get(i).getPayLevel()));
+            }
+            list.get(i).setReceivedTotalFee(receivedTotalFee);
         }
         return list;
     }
