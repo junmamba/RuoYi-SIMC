@@ -138,7 +138,7 @@ public class SimcResidentOldLandLosingServiceImpl implements ISimcResidentOldLan
             if (null != simcResidentOldLandLosing.getReturnFeeTime()) {
                 throw new Exception("正常状态不允许选择退费时间");
             }
-            if (null != simcResidentOldLandLosing.getReturnFee()) {
+            if (null != simcResidentOldLandLosing.getReturnFee()  && simcResidentOldLandLosing.getReturnFee() > 0) {
                 throw new Exception("正常状态不允许输入退费金额");
             }
         } else {// 退出状态
