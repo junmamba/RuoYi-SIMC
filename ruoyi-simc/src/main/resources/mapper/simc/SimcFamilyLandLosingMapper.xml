@@ -275,4 +275,59 @@
       </if>
     </where>
   </select>
+
+  <update id="updateByFamilyNoSelective" parameterType="com.ruoyi.simc.domain.SimcFamilyLandLosing">
+    update simc_family_land_losing
+    <set>
+      <if test="headResidentName != null">
+        head_resident_name = #{headResidentName,jdbcType=VARCHAR},
+      </if>
+      <if test="fllFamilyMemberNumber != null">
+        fll_family_member_number = #{fllFamilyMemberNumber,jdbcType=INTEGER},
+      </if>
+      <if test="fllEligibleMemberNumber != null">
+        fll_eligible_member_number = #{fllEligibleMemberNumber,jdbcType=INTEGER},
+      </if>
+      <if test="originalAgriculturalAcreage != null">
+        original_agricultural_acreage = #{originalAgriculturalAcreage,jdbcType=DOUBLE},
+      </if>
+      <if test="fllTotalAgriculturalAcreage != null">
+        fll_total_agricultural_acreage = #{fllTotalAgriculturalAcreage,jdbcType=DOUBLE},
+      </if>
+      <if test="currentAgriculturalAcreage != null">
+        current_agricultural_acreage = #{currentAgriculturalAcreage,jdbcType=DOUBLE},
+      </if>
+      <if test="perAgriculturalAcreage != null">
+        per_agricultural_acreage = #{perAgriculturalAcreage,jdbcType=DOUBLE},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectIsCityLevel != null">
+        project_is_city_level = #{projectIsCityLevel,jdbcType=INTEGER},
+      </if>
+      <if test="fllTime != null">
+        fll_time = #{fllTime,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where family_no = #{familyNo,jdbcType=VARCHAR}
+  </update>
 </mapper>

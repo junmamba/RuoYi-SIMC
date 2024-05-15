@@ -8,3 +8,10 @@ export function tableList(query) {
     params: query
   })
 }
+
+export function delResidentSocialInsuranceSubsidy(subsidyLogIds) {
+  return request({
+    url: '/simc/rsis/' + subsidyLogIds,
+    method: 'delete'
+  })
+}

@@ -34,7 +34,7 @@ public interface ISimcResidentOldLandLosingService {
      * @return
      * @throws Exception
      */
-    public void oper(SimcResidentOldLandLosing simcResidentOldLandLosing) throws Exception;
+    public void oper(SimcResidentOldLandLosing simcResidentOldLandLosing, Long userId) throws Exception;
 
     /**
      * 批量删除

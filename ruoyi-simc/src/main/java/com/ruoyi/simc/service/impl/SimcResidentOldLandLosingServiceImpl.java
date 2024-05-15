@@ -94,17 +94,22 @@ public class SimcResidentOldLandLosingServiceImpl implements ISimcResidentOldLan
      * @return
      * @throws Exception
      */
-    public void oper(SimcResidentOldLandLosing simcResidentOldLandLosing) throws Exception {
+    public void oper(SimcResidentOldLandLosing simcResidentOldLandLosing, Long userId) throws Exception {
         if (StringUtils.isBlank(simcResidentOldLandLosing.getId())) {
             throw new Exception("表单数据被篡改");
         }
+        SimcResidentOldLandLosing residentOldLandLosing = this.simcResidentOldLandLosingMapper.selectByPrimaryKey(simcResidentOldLandLosing.getResidentIdCardNo());
         if (!simcResidentOldLandLosing.getId().equals(simcResidentOldLandLosing.getResidentIdCardNo())) {
             // 说明修改了身份证号码
-            SimcResidentOldLandLosing residentOldLandLosing = this.simcResidentOldLandLosingMapper.selectByPrimaryKey(simcResidentOldLandLosing.getResidentIdCardNo());
             if (null != residentOldLandLosing) {
                 throw new Exception("身份证号码：" + simcResidentOldLandLosing.getResidentIdCardNo() + "已经存在其他老失地档案数据");
             }
+        } else {
+            if (null == residentOldLandLosing) {
+                throw new Exception("根据身份证号码：" + simcResidentOldLandLosing.getResidentIdCardNo() + "查询不到老失地档案数据");
+            }
         }
+
         if (StringUtils.isBlank(simcResidentOldLandLosing.getResidentIdCardNo())) {
             throw new Exception("身份证号码不能为空");
         }
@@ -112,12 +117,22 @@ public class SimcResidentOldLandLosingServiceImpl implements ISimcResidentOldLan
             throw new Exception("身份证号码必须是18位");
         }
         if (StringUtils.isBlank(simcResidentOldLandLosing.getResidentName())) {
-            throw new Exception("身份证号码为空");
+            throw new Exception("姓名不能为空");
         }
         String sex = simcResidentOldLandLosing.getResidentIdCardNo().substring(16, 17);
         if (!("1".equals(sex) || "2".equals(sex))) {
             throw new Exception("身份证号码第17位填写错误");
         }
+        if (null == simcResidentOldLandLosing.getResidentTownshipDistrictId() || simcResidentOldLandLosing.getResidentTownshipDistrictId() <= 0) {
+            throw new Exception("请选择乡镇");
+        }
+        if (null == simcResidentOldLandLosing.getResidentVillageDistrictId() || simcResidentOldLandLosing.getResidentVillageDistrictId() <= 0) {
+            throw new Exception("请选择村（社区）");
+        }
+        if (null == simcResidentOldLandLosing.getResidentGroupDistrictId() || simcResidentOldLandLosing.getResidentGroupDistrictId() <= 0) {
+            throw new Exception("请选择村");
+        }
+
         if (!("1".equals(simcResidentOldLandLosing.getPayLevel()) || "2".equals(simcResidentOldLandLosing.getPayLevel()) || "3".equals(simcResidentOldLandLosing.getPayLevel()))) {
             throw new Exception("请选择正确的缴费档次");
         }
@@ -138,7 +153,7 @@ public class SimcResidentOldLandLosingServiceImpl implements ISimcResidentOldLan
             if (null != simcResidentOldLandLosing.getReturnFeeTime()) {
                 throw new Exception("正常状态不允许选择退费时间");
             }
-            if (null != simcResidentOldLandLosing.getReturnFee()  && simcResidentOldLandLosing.getReturnFee() > 0) {
+            if (null != simcResidentOldLandLosing.getReturnFee() && simcResidentOldLandLosing.getReturnFee() > 0) {
                 throw new Exception("正常状态不允许输入退费金额");
             }
         } else {// 退出状态
@@ -179,6 +194,8 @@ public class SimcResidentOldLandLosingServiceImpl implements ISimcResidentOldLan
                     simcResidentOldLandLosing.getPayLevel());
             simcResidentOldLandLosing.setReturnFee(returnFee);
         }
+        simcResidentOldLandLosing.setModifyTime(DateUtils.getNowDate());
+        simcResidentOldLandLosing.setModifyUserId(userId);
         this.simcResidentOldLandLosingMapper.updateById(simcResidentOldLandLosing);
     }
 

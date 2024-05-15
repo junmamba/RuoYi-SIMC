@@ -19,4 +19,5 @@ public interface SimcResidentSocialInsuranceSubsidyMapper {
 
     List<SimcResidentSocialInsuranceSubsidy> selectList(SimcResidentSocialInsuranceSubsidy record);
 
+    int updateByResidentIdCardNoSelective(SimcResidentSocialInsuranceSubsidy record);
 }

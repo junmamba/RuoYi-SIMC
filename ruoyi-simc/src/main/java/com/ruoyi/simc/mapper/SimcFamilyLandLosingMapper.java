@@ -22,4 +22,6 @@ public interface SimcFamilyLandLosingMapper {
 
     List<SimcFamilyLandLosing> selectList(SimcFamilyLandLosing record);
 
+    int updateByFamilyNoSelective(SimcFamilyLandLosing record);
+
 }

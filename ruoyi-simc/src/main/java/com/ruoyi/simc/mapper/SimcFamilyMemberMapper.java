@@ -19,4 +19,6 @@ public interface SimcFamilyMemberMapper {
     int updateByPrimaryKey(SimcFamilyMember record);
 
     List<SimcFamilyMember> selectByFamilyNo(String familyNo);
+
+    int updateByMemberCardNoSelective(SimcFamilyMember record);
 }

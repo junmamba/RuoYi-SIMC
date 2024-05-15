@@ -86,4 +86,17 @@ public class SimcResidentSocialInsuranceSubsidyServiceImpl implements ISimcResid
         }
         return list;
     }
+
+    /**
+     * 批量删除
+     *
+     * @param subsidyLogIds
+     * @return 结果
+     */
+    public int delete(Long[] subsidyLogIds) {
+        for (int i = 0; null != subsidyLogIds && i < subsidyLogIds.length; i++) {
+            this.simcResidentSocialInsuranceSubsidyMapper.deleteByPrimaryKey(subsidyLogIds[i]);
+        }
+        return 1;
+    }
 }

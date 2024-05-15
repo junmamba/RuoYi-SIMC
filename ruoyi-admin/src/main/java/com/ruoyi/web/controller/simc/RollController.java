@@ -68,12 +68,12 @@ public class RollController extends BaseController {
     @Log(title = "居民老失地档案管理", businessType = BusinessType.UPDATE)
     @PostMapping("/oper")
     public AjaxResult oper(@Validated @RequestBody SimcResidentOldLandLosing residentOldLandLosing) throws Exception {
-        this.simcResidentOldLandLosingService.oper(residentOldLandLosing);
+        this.simcResidentOldLandLosingService.oper(residentOldLandLosing, getUserId());
         return toAjax(1);
     }
 
     /**
-     * 删除用户
+     * 删除
      */
     @Log(title = "居民老失地档案管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{residentIdCardNos}")

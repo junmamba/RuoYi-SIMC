@@ -202,7 +202,7 @@
       </div>
     </el-dialog>
 
-    <!-- 添加或修改用户配置对话框 -->
+    <!-- 修改对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="880px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-row>
@@ -229,6 +229,47 @@
             </el-form-item>
           </el-col>
         </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="乡镇" prop="residentTownshipDistrictId">
+              <el-select v-model="form.residentTownshipDistrictId" placeholder="请选择乡镇" style="width: 185px;" @change="handleChangeTownshipDistrictId">
+                <el-option
+                  v-for="dict in districtIdOptions"
+                  :key="dict.id"
+                  :label="dict.label"
+                  :value="dict.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="村（社区）" prop="residentVillageDistrictId">
+              <el-select v-model="form.residentVillageDistrictId" placeholder="请选择村（社区）" style="width: 185px;" @change="handleChangeVillageDistrictId">
+                <el-option
+                  v-for="dict in villageDistrictIdOptions"
+                  :key="dict.id"
+                  :label="dict.label"
+                  :value="dict.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="小组" prop="residentGroupDistrictId">
+              <el-select v-model="form.residentGroupDistrictId" placeholder="请选择组" style="width: 185px;">
+                <el-option
+                  v-for="dict in groupDistrictIdOptions"
+                  :key="dict.id"
+                  :label="dict.label"
+                  :value="dict.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系电话" prop="residentPhone">
@@ -359,6 +400,8 @@ export default {
       // 选中数组
       ids: [],
       districtIdOptions: [],
+      villageDistrictIdOptions: [],
+      groupDistrictIdOptions: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -438,6 +481,15 @@ export default {
         ],
         returnFee: [
           {validator: this.validReturnFee, trigger: ['blur', 'change'] }
+        ],
+        residentTownshipDistrictId: [
+          { required: true, message: "请选择乡镇", trigger: ['blur', 'change'] }
+        ],
+        residentVillageDistrictId: [
+          { required: true, message: "请选择村（社区）", trigger: ['blur', 'change'] }
+        ],
+        residentGroupDistrictId: [
+          { required: true, message: "请选择组", trigger: ['blur', 'change'] }
         ]
       }
     };
@@ -501,6 +553,8 @@ export default {
         if (null == response.data || undefined == response.data) {
           this.$alert('根据身份证号码：' + residentIdCardNo+'查询不到老失地档案信息');
         } else {
+          this.initVillageDistrictIdOptions(response.data.residentTownshipDistrictId);
+          this.intGroupDistrictIdOptions(response.data.residentTownshipDistrictId, response.data.residentVillageDistrictId);
           response.data.residentSex = response.data.residentSex + '';
           response.data.id = response.data.residentIdCardNo;
           this.form = response.data;
@@ -597,12 +651,57 @@ export default {
           callback();
       }
     },
+    handleChangeTownshipDistrictId(value) {
+      this.initVillageDistrictIdOptions(value);
+      this.groupDistrictIdOptions = [];
+      this.form.residentVillageDistrictId = undefined;
+      this.form.residentGroupDistrictId = undefined;
+    },
+    handleChangeVillageDistrictId(value) {
+      this.intGroupDistrictIdOptions(this.form.residentTownshipDistrictId, value);
+      this.form.residentGroupDistrictId = undefined;
+    },
+    initVillageDistrictIdOptions(townshipDistrictId) {
+      if (townshipDistrictId == undefined || townshipDistrictId <= 0) {
+        this.villageDistrictIdOptions = [];
+      }
+      for (let i = 0; i < this.districtIdOptions.length; i++) {
+        if(this.districtIdOptions[i].id == townshipDistrictId) {
+          this.villageDistrictIdOptions = this.districtIdOptions[i].children;
+          break;
+        }
+      }
+    },
+    intGroupDistrictIdOptions(townshipDistrictId, villageDistrictId) {
+      if (townshipDistrictId == undefined || townshipDistrictId <= 0 || villageDistrictId == undefined || villageDistrictId <= 0) {
+        this.groupDistrictIdOptions = [];
+      }
+      for (let i = 0; i < this.districtIdOptions.length; i++) {
+        if (this.districtIdOptions[i].id == townshipDistrictId) {
+          let isFind = false;
+          let villageDistrictIdOptions = this.districtIdOptions[i].children;
+          for (let j = 0; j < villageDistrictIdOptions.length; j++) {
+            if (villageDistrictIdOptions[j].id == villageDistrictId) {
+              this.groupDistrictIdOptions = villageDistrictIdOptions[j].children;
+              isFind = true;
+              break;
+            }
+          }
+          if (isFind) {
+            break;
+          }
+        }
+      }
+    },
     reset() {
       this.form = {
         residentIdCardNo: undefined,
         residentName: undefined,
         residentSex: undefined,
         residentPhone: undefined,
+        residentTownshipDistrictId: undefined,
+        residentVillageDistrictId: undefined,
+        residentGroupDistrictId: undefined,
         payTime: undefined,
         payLevel: undefined,
         payMoney: undefined,

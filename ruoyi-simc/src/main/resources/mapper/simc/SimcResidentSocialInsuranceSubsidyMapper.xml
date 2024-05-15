@@ -275,4 +275,60 @@
     </where>
     order by resident_township_district_id, resident_village_district_id, resident_group_district_id, resident_id_card_no, subsidy_time  desc
   </select>
+
+
+  <update id="updateByResidentIdCardNoSelective" parameterType="com.ruoyi.simc.domain.SimcResidentSocialInsuranceSubsidy">
+    update simc_resident_social_insurance_subsidy
+    <set>
+      <if test="residentIdCardNo != null">
+        resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="residentName != null">
+        resident_name = #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="residentSex != null">
+        resident_sex = #{residentSex,jdbcType=INTEGER},
+      </if>
+      <if test="residentBirthDate != null">
+        resident_Birth_date = #{residentBirthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="residentPhone != null">
+        resident_phone = #{residentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentVillageDistrictId != null">
+        resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentGroupDistrictId != null">
+        resident_group_district_id = #{residentGroupDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="socialInsuranceType != null">
+        social_insurance_type = #{socialInsuranceType,jdbcType=VARCHAR},
+      </if>
+      <if test="subsidyMoney != null">
+        subsidy_money = #{subsidyMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="subsidyTime != null">
+        subsidy_time = #{subsidyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </update>
 </mapper>

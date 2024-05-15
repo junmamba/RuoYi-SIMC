@@ -17,4 +17,12 @@ public interface ISimcResidentSocialInsuranceSubsidyService {
      * @return 居民社会保险补贴列表
      */
     public List<SimcResidentSocialInsuranceSubsidy> selectList(SimcResidentSocialInsuranceSubsidy rsis) throws Exception;
+
+    /**
+     * 批量删除
+     *
+     * @param subsidyLogIds
+     * @return 结果
+     */
+    public int delete(Long[] subsidyLogIds);
 }

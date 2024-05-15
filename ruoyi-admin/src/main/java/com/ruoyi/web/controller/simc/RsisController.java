@@ -11,10 +11,7 @@ import com.ruoyi.simc.domain.SimcResidentSocialInsuranceSubsidyImportRowData;
 import com.ruoyi.simc.service.ISimcImportService;
 import com.ruoyi.simc.service.ISimcResidentSocialInsuranceSubsidyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -50,5 +47,14 @@ public class RsisController extends BaseController {
         List<SimcResidentSocialInsuranceSubsidyImportRowData> rowDataList = util.importExcel(file.getInputStream(), 0);
         String message = this.simcImportService.importResidentSocialInsuranceSubsidyDataList(rowDataList, getUserId());
         return success(message);
+    }
+
+    /**
+     * 删除
+     */
+    @Log(title = "居民社会保险补贴管理", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{subsidyLogIds}")
+    public AjaxResult remove(@PathVariable Long[] subsidyLogIds) {
+        return toAjax(simcResidentSocialInsuranceSubsidyService.delete(subsidyLogIds));
     }
 }

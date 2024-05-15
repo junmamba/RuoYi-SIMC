@@ -79,6 +79,16 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+        >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="info"
           plain
           icon="el-icon-upload2"
@@ -92,6 +102,7 @@
 
     <el-table v-loading="loading" :data="tableDataList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="30" align="center"/>
+      <el-table-column label="流水编号" align="center" prop="subsidyLogId"/>
       <el-table-column label="姓名" align="center" prop="residentName"/>
       <el-table-column label="性别" align="center" prop="residentSex">
         <template slot-scope="scope">
@@ -153,7 +164,7 @@
 </template>
 
 <script>
-import {tableList} from "@/api/simc/rsis";
+import {tableList, delResidentSocialInsuranceSubsidy} from "@/api/simc/rsis";
 import {listChaiSangDistrict} from "@/api/simc/district";
 import {getToken} from "@/utils/auth";
 
@@ -274,10 +285,20 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.postId)
+      this.ids = selection.map(item => item.subsidyLogId)
       this.single = selection.length != 1
       this.multiple = !selection.length
-    }
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const subsidyLogIds = row.subsidyLogId || this.ids;
+      this.$modal.confirm('是否确认删除流水编号："' + subsidyLogIds + '"有关的社保补贴记录数据项？').then(function() {
+        return delResidentSocialInsuranceSubsidy(subsidyLogIds);
+      }).then(() => {
+        this.tableList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {});
+    },
   }
 };
 </script>
