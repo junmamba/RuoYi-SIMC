@@ -1,5 +1,6 @@
 package com.ruoyi.simc.mapper;
 
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.simc.domain.SimcDistrict;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +24,6 @@ public interface SimcDistrictMapper {
     List<SimcDistrict> selectByDistrictIdList(@Param("districtIdList") List<Long> districtIdList);
 
     List<SimcDistrict> selectByParentDistrictIdList(@Param("parentDistrictIdList") List<Long> parentDistrictIdList);
+
+    public List<SimcDistrict> selectDistrictList(SimcDistrict district);
 }

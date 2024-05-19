@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.unit.DataUnit;
 
 import java.util.*;
 
@@ -50,6 +49,9 @@ public class SimcImportServiceImpl implements ISimcImportService {
 
     @Autowired
     private SimcResidentOldLandLosingMapper simcResidentOldLandLosingMapper;
+
+    @Autowired
+    private SimcOldAgriculturalInsuranceCancelMapper simcOldAgriculturalInsuranceCancelMapper;
 
     /**
      * 导入居民社会保险数据列表
@@ -585,7 +587,9 @@ public class SimcImportServiceImpl implements ISimcImportService {
                               Map<String, Map<String, Object>> groupDistrictMap) {
         combDistrict(townshipDistrictMap, townshipDistrictName, townshipDistrictName, ISimcDistrictService.CHAI_SANG_TOWNSHIP_DISTRICT_NAME);
         combDistrict(villageDistrictMap, townshipDistrictName + "_" + villageDistrictName, villageDistrictName, townshipDistrictName);
-        combDistrict(groupDistrictMap, townshipDistrictName + "_" + villageDistrictName + "_" + groupDistrictName, groupDistrictName, villageDistrictName);
+        if (null != groupDistrictMap) {
+            combDistrict(groupDistrictMap, townshipDistrictName + "_" + villageDistrictName + "_" + groupDistrictName, groupDistrictName, villageDistrictName);
+        }
     }
 
     /**
@@ -808,7 +812,7 @@ public class SimcImportServiceImpl implements ISimcImportService {
      * @param userId            操作员ID
      * @return 结果
      */
-    public String importSimcResidentOldLandLosingDataDataList(List<SimcResidentOldLandLosingImportRowData> importRowDataList, Long userId) throws Exception {
+    public String importSimcResidentOldLandLosingDataList(List<SimcResidentOldLandLosingImportRowData> importRowDataList, Long userId) throws Exception {
         Date currentDate = DateUtils.getNowDate();
         if (CollectionUtils.isEmpty(importRowDataList)) {
             throw new Exception("导入的数据为空");
@@ -853,11 +857,11 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 addRowIndexFailInfo(rowFailInfos, rowIndex, "组为空");
             }
             combDistrict(importRowData.getResidentTownshipDistrictName(),
-                         importRowData.getResidentVillageDistrictName(),
-                         importRowData.getResidentGroupDistrictName(),
-                         townshipDistrictMap,
-                         villageDistrictMap,
-                         groupDistrictMap);
+                    importRowData.getResidentVillageDistrictName(),
+                    importRowData.getResidentGroupDistrictName(),
+                    townshipDistrictMap,
+                    villageDistrictMap,
+                    groupDistrictMap);
             if (StringUtils.isBlank(importRowData.getStrPayTime())) {
                 addRowIndexFailInfo(rowFailInfos, rowIndex, "缴费时间为空");
             } else {
@@ -1015,11 +1019,11 @@ public class SimcImportServiceImpl implements ISimcImportService {
             if ("2".equals(simcResidentOldLandLosing.getReturnFeeState())
                     && simcResidentOldLandLosing.getQuitTime() != null) {
                 double returnFee = simcResidentOldLandLosing.getReturnFee() != null ?
-                                        simcResidentOldLandLosing.getReturnFee():
-                                        SimcUtil.calReturnFee(simcResidentOldLandLosing.getPayMoney(),
-                                                              simcResidentOldLandLosing.getTheFirstReceiveTime(),
-                                                              simcResidentOldLandLosing.getQuitTime(),
-                                                              simcResidentOldLandLosing.getPayLevel());
+                        simcResidentOldLandLosing.getReturnFee() :
+                        SimcUtil.calReturnFee(simcResidentOldLandLosing.getPayMoney(),
+                                simcResidentOldLandLosing.getTheFirstReceiveTime(),
+                                simcResidentOldLandLosing.getQuitTime(),
+                                simcResidentOldLandLosing.getPayLevel());
                 simcResidentOldLandLosing.setReturnFee(returnFee);
             }
             if (isCreate) {
@@ -1030,6 +1034,130 @@ public class SimcImportServiceImpl implements ISimcImportService {
                 simcResidentOldLandLosing.setModifyUserId(userId);
                 simcResidentOldLandLosing.setModifyTime(currentDate);
                 this.simcResidentOldLandLosingMapper.updateByPrimaryKey(simcResidentOldLandLosing);
+            }
+        }
+        return "温馨提示</br>导入成功";
+    }
+
+
+    /**
+     * 导入老农保退保列表
+     *
+     * @param importRowDataList 数据列表
+     * @param userId            操作员ID
+     * @return 结果
+     */
+    public String importSimcOldAgriculturalInsuranceCancelDataList(List<SimcOldAgriculturalInsuranceCancelImportRowData> importRowDataList, Long userId) throws Exception {
+        Date currentDate = DateUtils.getNowDate();
+        if (CollectionUtils.isEmpty(importRowDataList)) {
+            throw new Exception("导入的数据为空");
+        }
+        Map<String, Map<String, Object>> townshipDistrictMap = new HashMap<>();
+        Map<String, Map<String, Object>> villageDistrictMap = new HashMap<>();
+        Map<Integer, List<String>> rowFailInfos = new LinkedHashMap<>();
+        Set<String> residentIdCardNoSet = new HashSet<>();
+        for (SimcOldAgriculturalInsuranceCancelImportRowData importRowData : importRowDataList) {
+            Integer rowIndex = importRowData.getRowIndex();
+            String residentIdCardNo = importRowData.getResidentIdCardNo();
+            if (StringUtils.isBlank(importRowData.getResidentName())) {
+                addRowIndexFailInfo(rowFailInfos, rowIndex, "退保人姓名不能为空");
+            }
+            if (StringUtils.isBlank(residentIdCardNo)) {
+                addRowIndexFailInfo(rowFailInfos, rowIndex, "退保人身份证号码不能为空");
+            } else {
+                if (residentIdCardNo.length() != 18) {
+                    addRowIndexFailInfo(rowFailInfos, rowIndex, "退保人身份证号码必须是18位");
+                }
+                if (residentIdCardNoSet.contains(residentIdCardNo)) {
+                    addRowIndexFailInfo(rowFailInfos, rowIndex, "存在多条退保人身份证号码为" + residentIdCardNo + "的数据");
+                } else {
+                    residentIdCardNoSet.add(residentIdCardNo);
+                }
+            }
+            if (StringUtils.isBlank(importRowData.getResidentPhone())) {
+                addRowIndexFailInfo(rowFailInfos, rowIndex, "退保人手机号码不能为空");
+            }
+            if (StringUtils.isBlank(importRowData.getResidentTownshipDistrictName())) {
+                addRowIndexFailInfo(rowFailInfos, rowIndex, "乡镇为空");
+            }
+            if (StringUtils.isBlank(importRowData.getResidentVillageDistrictName())) {
+                addRowIndexFailInfo(rowFailInfos, rowIndex, "村（社区）为空");
+            }
+
+            combDistrict(importRowData.getResidentTownshipDistrictName(),
+                    importRowData.getResidentVillageDistrictName(),
+                    null,
+                    townshipDistrictMap,
+                    villageDistrictMap,
+                    null);
+            if (null == importRowData.getMoney() || importRowData.getMoney() <= 0) {
+                addRowIndexFailInfo(rowFailInfos, rowIndex, "金额不能为空且必须大于0");
+            }
+
+            if (StringUtils.isNotBlank(importRowData.getSurrogateIdCardNo())) {
+                if (importRowData.getSurrogateIdCardNo().length() != 18) {
+                    addRowIndexFailInfo(rowFailInfos, rowIndex, "代领人身份证号码必须是18位");
+                }
+            }
+
+            if (StringUtils.isNotBlank(importRowData.getStrCancelTime())) {
+                if (importRowData.getStrCancelTime().length() != 8) {
+                    addRowIndexFailInfo(rowFailInfos, rowIndex, "退保时间格式应该为yyyyMMdd");
+                } else {
+                    try {
+                        DateUtils.dateTime(DateUtils.YYYYMMDD, importRowData.getStrCancelTime());
+                    } catch (Exception e) {
+                        addRowIndexFailInfo(rowFailInfos, rowIndex, "退保时间格式应该为yyyyMMdd");
+                    }
+                }
+            }
+        }
+        if (MapUtils.isNotEmpty(rowFailInfos)) {
+            return wrapRowFailInfos(rowFailInfos, 1);
+        }
+
+        // @part 2: 生成数据
+        // @part 2.1: 初始化行政区
+        Map<String, Map<String, Object>> chaiSangQuDistrictMap = new HashMap<>();
+        Map<String, Object> chaiSangQuDistrict = new HashMap<>();
+        chaiSangQuDistrict.put("DistrictName", ISimcDistrictService.CHAI_SANG_TOWNSHIP_DISTRICT_NAME);
+        chaiSangQuDistrict.put("DistrictId", ISimcDistrictService.CHAI_SANG_TOWNSHIP_DISTRICT_ID);
+        chaiSangQuDistrictMap.put(ISimcDistrictService.CHAI_SANG_TOWNSHIP_DISTRICT_NAME, chaiSangQuDistrict);
+        initAndSaveDistrict(townshipDistrictMap, chaiSangQuDistrictMap, "乡镇", "市(含：直辖市市辖区)", false);
+        initAndSaveDistrict(villageDistrictMap, townshipDistrictMap, "村（社区）", "乡镇", false);
+
+        for (SimcOldAgriculturalInsuranceCancelImportRowData importRowData : importRowDataList) {
+            SimcOldAgriculturalInsuranceCancel simcOldAgriculturalInsuranceCancel = this.simcOldAgriculturalInsuranceCancelMapper.selectByPrimaryKey(importRowData.getResidentIdCardNo());
+            boolean isCreate = true;
+            if (null == simcOldAgriculturalInsuranceCancel) {
+                simcOldAgriculturalInsuranceCancel = new SimcOldAgriculturalInsuranceCancel();
+            } else {
+                isCreate = false;
+            }
+            simcOldAgriculturalInsuranceCancel.setResidentIdCardNo(importRowData.getResidentIdCardNo());
+            simcOldAgriculturalInsuranceCancel.setResidentName(importRowData.getResidentName());
+            simcOldAgriculturalInsuranceCancel.setResidentPhone(importRowData.getResidentPhone());
+            simcOldAgriculturalInsuranceCancel.setResidentTownshipDistrictId(getDistrictId(townshipDistrictMap, importRowData.getResidentTownshipDistrictName()));
+            simcOldAgriculturalInsuranceCancel.setResidentVillageDistrictId(getDistrictId(villageDistrictMap, importRowData.getResidentTownshipDistrictName() + "_" + importRowData.getResidentVillageDistrictName()));
+            simcOldAgriculturalInsuranceCancel.setMoney(importRowData.getMoney());
+            simcOldAgriculturalInsuranceCancel.setSurrogateIdCardNo(importRowData.getSurrogateIdCardNo());
+            simcOldAgriculturalInsuranceCancel.setSurrogateName(importRowData.getSurrogateName());
+            simcOldAgriculturalInsuranceCancel.setBank(importRowData.getBank());
+            simcOldAgriculturalInsuranceCancel.setBankCode(importRowData.getBankCode());
+            if (StringUtils.isNotBlank(importRowData.getStrCancelTime())) {
+                simcOldAgriculturalInsuranceCancel.setCancelTime(DateUtils.dateTime(DateUtils.YYYYMMDD, importRowData.getStrCancelTime()));
+            } else {
+                simcOldAgriculturalInsuranceCancel.setCancelTime(null);
+            }
+
+            if (isCreate) {
+                simcOldAgriculturalInsuranceCancel.setCreateUserId(userId);
+                simcOldAgriculturalInsuranceCancel.setCreateTime(currentDate);
+                this.simcOldAgriculturalInsuranceCancelMapper.insert(simcOldAgriculturalInsuranceCancel);
+            } else {
+                simcOldAgriculturalInsuranceCancel.setModifyUserId(userId);
+                simcOldAgriculturalInsuranceCancel.setModifyTime(currentDate);
+                this.simcOldAgriculturalInsuranceCancelMapper.updateByPrimaryKey(simcOldAgriculturalInsuranceCancel);
             }
         }
         return "温馨提示</br>导入成功";

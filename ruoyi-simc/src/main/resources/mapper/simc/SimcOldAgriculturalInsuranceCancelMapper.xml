@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.simc.mapper.SimcOldAgriculturalInsuranceCancelMapper">
+  <resultMap id="BaseResultMap" type="com.ruoyi.simc.domain.SimcOldAgriculturalInsuranceCancel">
+    <id column="resident_id_card_no" jdbcType="VARCHAR" property="residentIdCardNo" />
+    <result column="resident_name" jdbcType="VARCHAR" property="residentName" />
+    <result column="resident_phone" jdbcType="VARCHAR" property="residentPhone" />
+    <result column="resident_township_district_id" jdbcType="BIGINT" property="residentTownshipDistrictId" />
+    <result column="resident_village_district_id" jdbcType="BIGINT" property="residentVillageDistrictId" />
+    <result column="resident_group_district_id" jdbcType="BIGINT" property="residentGroupDistrictId" />
+    <result column="money" jdbcType="DOUBLE" property="money" />
+    <result column="surrogate_id_card_no" jdbcType="VARCHAR" property="surrogateIdCardNo" />
+    <result column="surrogate_name" jdbcType="VARCHAR" property="surrogateName" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="bank_code" jdbcType="VARCHAR" property="bankCode" />
+    <result column="cancel_time" jdbcType="TIMESTAMP" property="cancelTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_user_id" jdbcType="BIGINT" property="modifyUserId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    resident_id_card_no, resident_name, resident_phone, resident_township_district_id, 
+    resident_village_district_id, resident_group_district_id, money, surrogate_id_card_no, 
+    surrogate_name, bank, bank_code, cancel_time, remark, create_user_id, create_time, 
+    modify_user_id, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from simc_old_agricultural_insurance_cancel
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from simc_old_agricultural_insurance_cancel
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ruoyi.simc.domain.SimcOldAgriculturalInsuranceCancel">
+    insert into simc_old_agricultural_insurance_cancel (resident_id_card_no, resident_name, resident_phone, 
+      resident_township_district_id, resident_village_district_id, 
+      resident_group_district_id, money, surrogate_id_card_no, 
+      surrogate_name, bank, bank_code, 
+      cancel_time, remark, create_user_id, 
+      create_time, modify_user_id, modify_time
+      )
+    values (#{residentIdCardNo,jdbcType=VARCHAR}, #{residentName,jdbcType=VARCHAR}, #{residentPhone,jdbcType=VARCHAR}, 
+      #{residentTownshipDistrictId,jdbcType=BIGINT}, #{residentVillageDistrictId,jdbcType=BIGINT}, 
+      #{residentGroupDistrictId,jdbcType=BIGINT}, #{money,jdbcType=DOUBLE}, #{surrogateIdCardNo,jdbcType=VARCHAR}, 
+      #{surrogateName,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR}, #{bankCode,jdbcType=VARCHAR}, 
+      #{cancelTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ruoyi.simc.domain.SimcOldAgriculturalInsuranceCancel">
+    insert into simc_old_agricultural_insurance_cancel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="residentIdCardNo != null">
+        resident_id_card_no,
+      </if>
+      <if test="residentName != null">
+        resident_name,
+      </if>
+      <if test="residentPhone != null">
+        resident_phone,
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        resident_township_district_id,
+      </if>
+      <if test="residentVillageDistrictId != null">
+        resident_village_district_id,
+      </if>
+      <if test="residentGroupDistrictId != null">
+        resident_group_district_id,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="surrogateIdCardNo != null">
+        surrogate_id_card_no,
+      </if>
+      <if test="surrogateName != null">
+        surrogate_name,
+      </if>
+      <if test="bank != null">
+        bank,
+      </if>
+      <if test="bankCode != null">
+        bank_code,
+      </if>
+      <if test="cancelTime != null">
+        cancel_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="residentIdCardNo != null">
+        #{residentIdCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="residentName != null">
+        #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="residentPhone != null">
+        #{residentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        #{residentTownshipDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentVillageDistrictId != null">
+        #{residentVillageDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentGroupDistrictId != null">
+        #{residentGroupDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="surrogateIdCardNo != null">
+        #{surrogateIdCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="surrogateName != null">
+        #{surrogateName,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null">
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCode != null">
+        #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelTime != null">
+        #{cancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.simc.domain.SimcOldAgriculturalInsuranceCancel">
+    update simc_old_agricultural_insurance_cancel
+    <set>
+      <if test="residentName != null">
+        resident_name = #{residentName,jdbcType=VARCHAR},
+      </if>
+      <if test="residentPhone != null">
+        resident_phone = #{residentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentVillageDistrictId != null">
+        resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="residentGroupDistrictId != null">
+        resident_group_district_id = #{residentGroupDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="surrogateIdCardNo != null">
+        surrogate_id_card_no = #{surrogateIdCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="surrogateName != null">
+        surrogate_name = #{surrogateName,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null">
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCode != null">
+        bank_code = #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelTime != null">
+        cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ruoyi.simc.domain.SimcOldAgriculturalInsuranceCancel">
+    update simc_old_agricultural_insurance_cancel
+    set resident_name = #{residentName,jdbcType=VARCHAR},
+      resident_phone = #{residentPhone,jdbcType=VARCHAR},
+      resident_township_district_id = #{residentTownshipDistrictId,jdbcType=BIGINT},
+      resident_village_district_id = #{residentVillageDistrictId,jdbcType=BIGINT},
+      resident_group_district_id = #{residentGroupDistrictId,jdbcType=BIGINT},
+      money = #{money,jdbcType=DOUBLE},
+      surrogate_id_card_no = #{surrogateIdCardNo,jdbcType=VARCHAR},
+      surrogate_name = #{surrogateName,jdbcType=VARCHAR},
+      bank = #{bank,jdbcType=VARCHAR},
+      bank_code = #{bankCode,jdbcType=VARCHAR},
+      cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where resident_id_card_no = #{residentIdCardNo,jdbcType=VARCHAR}
+  </update>
+
+  <!--开发人员自定义片段-->
+  <select id="selectList" parameterType="com.ruoyi.simc.domain.SimcOldAgriculturalInsuranceCancel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from simc_old_agricultural_insurance_cancel
+    <where>
+      <if test="residentName != null and residentName != ''">
+        AND resident_name like concat('%', #{residentName}, '%')
+      </if>
+      <if test="residentPhone != null">
+        AND resident_phone like concat('%', #{residentPhone}, '%')
+      </if>
+      <if test="residentIdCardNo != null">
+        AND resident_id_card_no like concat('%', #{residentIdCardNo}, '%')
+      </if>
+      <if test="residentTownshipDistrictId != null">
+        AND resident_township_district_id = #{residentTownshipDistrictId}
+      </if>
+      <if test="residentVillageDistrictId != null">
+        AND resident_village_district_id = #{residentVillageDistrictId}
+      </if>
+
+      <if test="surrogateName != null and surrogateName != ''">
+        AND surrogate_name like concat('%', #{surrogateName}, '%')
+      </if>
+      <if test="surrogateIdCardNo != null">
+        AND surrogate_id_card_no like concat('%', #{surrogateIdCardNo}, '%')
+      </if>
+      <if test="params.beginCancelTime != null and params.beginCancelTime != ''"><!-- 开始时间检索 -->
+        AND cancel_time &gt;= #{params.beginCancelTime}
+      </if>
+      <if test="params.endCancelTime != null and params.endCancelTime != ''"><!-- 结束时间检索 -->
+        AND cancel_time &lt;= #{params.endCancelTime}
+      </if>
+    </where>
+    order by resident_township_district_id, resident_village_district_id desc
+  </select>
+</mapper>

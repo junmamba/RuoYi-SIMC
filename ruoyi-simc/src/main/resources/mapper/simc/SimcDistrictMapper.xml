@@ -115,6 +115,7 @@
         #{districtName}
       </foreach>
     </if>
+    order by sort_id
   </select>
 
   <select id="selectByDistrictIdList" resultMap="BaseResultMap">
@@ -125,6 +126,7 @@
       <foreach collection="districtIdList" item="districtId" open="(" separator="," close=")">
         #{districtId}
       </foreach>
+    order by sort_id
   </select>
 
   <select id="selectByParentDistrictIdList" resultMap="BaseResultMap">
@@ -135,5 +137,26 @@
     <foreach collection="parentDistrictIdList" item="parentDistrictId" open="(" separator="," close=")">
       #{parentDistrictId}
     </foreach>
+    order by sort_id
+  </select>
+
+  <select id="selectDistrictList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from simc_district
+    where 1 = 1
+    <if test="districtId != null and districtId != 0">
+      AND district_id = #{districtId}
+    </if>
+    <if test="districtName != null and districtName != ''">
+      AND district_name like concat('%', #{districtName}, '%')
+    </if>
+    <if test="parentDistrictId != null and parentDistrictId != 0">
+      AND parent_district_id = #{parentDistrictId}
+    </if>
+    <if test="districtType != null and districtType != ''">
+      AND district_type = #{districtType}
+    </if>
+    order by sort_id
   </select>
 </mapper>

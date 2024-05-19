@@ -48,7 +48,7 @@ public class RollController extends BaseController {
     public AjaxResult importData(MultipartFile file) throws Exception {
         ExcelUtil<SimcResidentOldLandLosingImportRowData> util = new ExcelUtil<SimcResidentOldLandLosingImportRowData>(SimcResidentOldLandLosingImportRowData.class);
         List<SimcResidentOldLandLosingImportRowData> rowDataList = util.importExcel(file.getInputStream(), 1);
-        String message = this.simcImportService.importSimcResidentOldLandLosingDataDataList(rowDataList, getUserId());
+        String message = this.simcImportService.importSimcResidentOldLandLosingDataList(rowDataList, getUserId());
         return success(message);
     }
 

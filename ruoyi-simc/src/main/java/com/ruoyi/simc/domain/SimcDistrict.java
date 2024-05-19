@@ -1,6 +1,8 @@
 package com.ruoyi.simc.domain;
 
-public class SimcDistrict {
+import com.ruoyi.common.core.domain.BaseEntity;
+
+public class SimcDistrict extends BaseEntity {
     private Long districtId;
 
     private String districtName;

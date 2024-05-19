@@ -32,12 +32,16 @@ public class SimcDistrictServiceImpl implements ISimcDistrictService {
     @Autowired
     private SimcDistrictMapper simcDistrictMapper;
 
+    public List<SimcDistrict> createSubordinateDistrictId(long districtId, Set<String> subordinateDistrictNameSet) throws Exception {
+        return createSubordinateDistrictId(districtId, subordinateDistrictNameSet, null);
+    }
+
     /**
      * @param districtId
      * @param subordinateDistrictNameSet
      * @throws Exception
      */
-    public List<SimcDistrict> createSubordinateDistrictId(long districtId, Set<String> subordinateDistrictNameSet) throws Exception {
+    public List<SimcDistrict> createSubordinateDistrictId(long districtId, Set<String> subordinateDistrictNameSet, Map<String, Integer> sortInfo) throws Exception {
         if (CollectionUtils.isEmpty(subordinateDistrictNameSet)) {
             throw new Exception("需要添加的下级行政区域为空");
         }
@@ -127,7 +131,11 @@ public class SimcDistrictServiceImpl implements ISimcDistrictService {
                 newTargetSubordinateDistrict.setParentDistrictId(districtId);
                 newTargetSubordinateDistrict.setDistrictType(simcDistrict.getDistrictType() + 1);
                 newTargetSubordinateDistrict.setAreaCode(simcDistrict.getAreaCode());
-                newTargetSubordinateDistrict.setSortId(++sortId);
+                if (null != sortInfo && sortInfo.containsKey(newTargetSubordinateDistrictName)) {
+                    newTargetSubordinateDistrict.setSortId(sortInfo.get(newTargetSubordinateDistrictName));
+                } else {
+                    newTargetSubordinateDistrict.setSortId(++sortId);
+                }
                 this.simcDistrictMapper.insert(newTargetSubordinateDistrict);
                 resultList.add(newTargetSubordinateDistrict);
             }
@@ -162,7 +170,11 @@ public class SimcDistrictServiceImpl implements ISimcDistrictService {
         String townshipDistrictName = null == townshipDistrict ? StringUtils.EMPTY : townshipDistrict.getDistrictName();
         String villageDistrictName = (null == villageDistrict ? StringUtils.EMPTY : villageDistrict.getDistrictName());
         String groupDistrictName = null == groupDistrict ? StringUtils.EMPTY : groupDistrict.getDistrictName();
-        return townshipDistrictName + "/" + villageDistrictName + "/" + groupDistrictName;
+        if (StringUtils.isBlank(groupDistrictName)) {
+            return townshipDistrictName + "/" + villageDistrictName;
+        } else {
+            return townshipDistrictName + "/" + villageDistrictName + "/" + groupDistrictName;
+        }
     }
 
     public SimcDistrict getSimcDistrict(List<SimcDistrict> simcDistrictList, Long districtId) {
@@ -262,5 +274,162 @@ public class SimcDistrictServiceImpl implements ISimcDistrictService {
             param.put("groupDistrictId", districtId);
         }
         return param;
+    }
+
+    /**
+     * 查询行政区域管理数据
+     *
+     * @param district 行政区域信息
+     * @return 行政区域信息集合
+     */
+    public List<SimcDistrict> selectSimcDistrictList(SimcDistrict district) {
+        return this.simcDistrictMapper.selectDistrictList(district);
+    }
+
+    /**
+     * 查询行政区域管理数据
+     *
+     * @param districtId
+     * @return 行政区域信息集合
+     */
+    public SimcDistrict selectSimcDistrictByDistrictId(Long districtId) {
+        if (null == districtId || districtId <= 0) {
+            return null;
+        }
+        return this.simcDistrictMapper.selectByPrimaryKey(districtId);
+    }
+
+    /**
+     * 新增保存行政区域信息
+     *
+     * @param district 行政区域
+     * @return 结果
+     */
+    public int insertSimcDistrict(SimcDistrict district) throws Exception {
+        if (null == district) {
+            throw new Exception("参数非法");
+        }
+        if (!(null == district.getDistrictId() || district.getDistrictId() <= 0)) {
+            throw new Exception("行政区域编码必须为空");
+        }
+        if (null == district.getParentDistrictId() || district.getParentDistrictId() <= 0) {
+            throw new Exception("上级行政区域编码不能为空");
+        }
+        if (StringUtils.isBlank(district.getDistrictName())) {
+            throw new Exception("行政区域名称不能为空");
+        }
+        SimcDistrict newDbParentDistrict = this.simcDistrictMapper.selectByPrimaryKey(district.getParentDistrictId());
+        if (null == newDbParentDistrict) {
+            throw new Exception("无法获取到上级行政区域信息");
+        }
+
+        List<String> districtNames = new ArrayList<>();
+        districtNames.add(district.getDistrictName().trim());
+        List<SimcDistrict> childDistricts = this.simcDistrictMapper.selectByParentDistrictIdAndDistrictNames(district.getParentDistrictId(), districtNames);
+        if (null != childDistricts && childDistricts.size() > 0) {
+            throw new Exception("上级行政区域：【" + newDbParentDistrict.getDistrictName() + "】已经存在名称为【" + district.getDistrictName() + "】的行政区域，不允许添加！");
+        }
+
+        Map<String, Integer> sortInfo = new HashMap<>();
+        sortInfo.put(district.getDistrictName().trim(), district.getSortId());
+        createSubordinateDistrictId(district.getParentDistrictId(), new HashSet<>(districtNames), sortInfo);
+        return 1;
+    }
+
+    /**
+     * 新增保存行政区域信息
+     *
+     * @param district 行政区域
+     * @return 结果
+     */
+    public int updateSimcDistrict(SimcDistrict district) throws Exception {
+        if (null == district) {
+            throw new Exception("参数非法");
+        }
+        if (null == district.getDistrictId() || district.getDistrictId() <= 0) {
+            throw new Exception("行政区域编码不能为空");
+        }
+        if (null == district.getParentDistrictId() || district.getParentDistrictId() <= 0) {
+            throw new Exception("上级行政区域编码不能为空");
+        }
+        if (StringUtils.isBlank(district.getDistrictName())) {
+            throw new Exception("行政区域名称不能为空");
+        }
+
+        SimcDistrict dbDistrict = this.simcDistrictMapper.selectByPrimaryKey(district.getDistrictId());
+        if (null == dbDistrict) {
+            throw new Exception("根据行政编码查询不到行政编码数据");
+        }
+
+        SimcDistrict newDbParentDistrict = this.simcDistrictMapper.selectByPrimaryKey(district.getParentDistrictId());
+        if (null == newDbParentDistrict) {
+            throw new Exception("无法获取到上级行政区域信息");
+        }
+
+        if (dbDistrict.getParentDistrictId().longValue() != district.getParentDistrictId()) {
+            // 说明变更了上级行政区域, 此时需要校验
+            SimcDistrict oldDbParentDistrict = this.simcDistrictMapper.selectByPrimaryKey(dbDistrict.getParentDistrictId());
+            if (null == oldDbParentDistrict) {
+                throw new Exception("无法获取到原上级行政区域信息");
+            }
+            if (oldDbParentDistrict.getDistrictType().intValue() != newDbParentDistrict.getDistrictType()) {
+                throw new Exception("当前选择的上级行政区域：【" + newDbParentDistrict.getDistrictName()
+                        + "】类型为：【" + districtTypeName(newDbParentDistrict.getDistrictType())
+                        + "】，不满足条件！<br/>"
+                        + "请选择行政区域类型为：【" + districtTypeName(oldDbParentDistrict.getDistrictType())
+                        + "】的行政区域作为【" + district.getDistrictName() + "】的上级行政区域！");
+            }
+        }
+
+        if (!district.getDistrictName().trim().equals(dbDistrict.getDistrictName())) {// 说明改了名字, 判断parentDistrictId下面是否已经存在相同名字的下级行政区域
+            List<String> districtNames = new ArrayList<>();
+            districtNames.add(district.getDistrictName());
+            List<SimcDistrict> childDistricts = this.simcDistrictMapper.selectByParentDistrictIdAndDistrictNames(district.getParentDistrictId(), districtNames);
+            if (null != childDistricts && childDistricts.size() > 0) {
+                throw new Exception("上级行政区域：【" + newDbParentDistrict.getDistrictName() + "】已经存在名称为【" + district.getDistrictName() + "】的行政区域，不允许将当前行政区域名称修改成【" + district.getDistrictName() + "】");
+            }
+        }
+        district.setDistrictName(district.getDistrictName().trim());
+        this.simcDistrictMapper.updateByPrimaryKeySelective(district);
+        return 1;
+    }
+
+    private String districtTypeName(int districtType) throws Exception {
+        if (1 == districtType) {
+            return "省(含：直辖市)";
+        } else if (2 == districtType) {
+            return "市(含：直辖市市辖区)";
+        } else if (3 == districtType) {
+            return "区县";
+        } else if (4 == districtType) {
+            return "乡镇";
+        } else if (5 == districtType) {
+            return "村";
+        } else if (6 == districtType) {
+            return "组";
+        } else {
+            throw new Exception("无效的行政区域类型");
+        }
+    }
+
+    /**
+     * 删除行政区域管理信息
+     *
+     * @param districtId 行政区域ID
+     * @return 结果
+     */
+    public int deleteDistrictById(Long districtId) throws Exception {
+        if (null == districtId || districtId <= 0) {
+            throw new Exception("行政区域编码不能为空");
+        }
+        SimcDistrict simcDistrict = this.simcDistrictMapper.selectByPrimaryKey(districtId);
+        if (null == simcDistrict) {
+            throw new Exception("根据行政编码查询不到行政编码数据");
+        }
+        if (simcDistrict.getDistrictType() != 6) {
+            throw new Exception("系统仅支持删除组行政区域");
+        }
+        // 查询是否存在有效数据
+        return 1;
     }
 }

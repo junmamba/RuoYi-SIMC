@@ -1,6 +1,7 @@
 package com.ruoyi.simc.service;
 
 import com.ruoyi.common.core.domain.TreeSelect;
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.simc.domain.SimcDistrict;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public interface ISimcDistrictService {
     public String getDistrictName(Long townshipDistrictId, Long villageDistrictId, Long groupDistrictId, List<SimcDistrict> simcDistrictList);
 
     public SimcDistrict getSimcDistrict(List<SimcDistrict> simcDistrictList, Long districtId);
+
     /**
      * 查询柴桑区
      *
@@ -53,4 +55,44 @@ public interface ISimcDistrictService {
     public List<TreeSelect> queryChaiSangSubordinateDistrict() throws Exception;
 
     public Map<String, Long> buildQueryDistrictParam(Long districtId) throws Exception;
+
+    /**
+     * 查询行政区域管理数据
+     *
+     * @param district 行政区域信息
+     * @return 行政区域信息集合
+     */
+    public List<SimcDistrict> selectSimcDistrictList(SimcDistrict district);
+
+    /**
+     * 查询行政区域管理数据
+     *
+     * @param districtId
+     * @return 行政区域信息集合
+     */
+    public SimcDistrict selectSimcDistrictByDistrictId(Long districtId);
+
+    /**
+     * 新增保存行政区域信息
+     *
+     * @param district 行政区域
+     * @return 结果
+     */
+    public int insertSimcDistrict(SimcDistrict district) throws Exception;
+
+    /**
+     * 新增保存行政区域信息
+     *
+     * @param district 行政区域
+     * @return 结果
+     */
+    public int updateSimcDistrict(SimcDistrict district) throws Exception;
+
+    /**
+     * 删除行政区域管理信息
+     *
+     * @param districtId 行政区域ID
+     * @return 结果
+     */
+    public int deleteDistrictById(Long districtId) throws Exception;
 }
